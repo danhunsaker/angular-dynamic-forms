@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html ng-app="app">
+  <head>
+    <title>Angular Dynamic Forms Test</title>
+	<style>
+		legend {
+			font-weight: bold;
+		}
+		
+		label,
+		ng-form > button,
+		ng-form > input {
+			display: inline-block;
+			font-style: italic;
+			width: 20em;
+			margin: 1ex 1em;
+		}
+		
+		pre,
+		label input,
+		label select,
+		label textarea {
+			float: right;
+		}
+		
+		label div label {
+			display: block;
+			margin: 1ex;
+		}
+	</style>
+  </head>
+  <body ng-controller="AppCtrl" ng-cloak="">
+	<pre>stdFormData: {{stdFormData | pretty}}</pre>
+	<dynamic-form template="stdFormTemplate" ng-model="stdFormData">
+		<legend>template= test</legend>
+	</dynamic-form>
+	<pre>urlFormData: {{urlFormData | pretty}}</pre>
+	<dynamic-form template-url="form-template.js" ng-model="urlFormData">
+		<legend>templateUrl= test</legend>
+	</dynamic-form>
+	<!-- Load scripts at the end for performance. -->
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script>
+	<script src="../dynamic-forms.js"></script>
+	<script src="app.js"></script>
+  </body>
+</html>
