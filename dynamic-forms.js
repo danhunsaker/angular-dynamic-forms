@@ -15,12 +15,12 @@
 * @example <dynamic-form template-url="form-template.js" ng-model="formData"></dynamic-form>
 */
 angular.module('dynform', [])
-  .directive('dynamicForm', ['$q', '$parse', '$http', '$templateCache', '$compile', function ($q, $parse, $http, $templateCache, $compile) {
+  .directive('dynamicForm', ['$q', '$parse', '$http', '$templateCache', '$compile', '$document', function ($q, $parse, $http, $templateCache, $compile, $document) {
     var supported = {
         //  Text-based elements
         'text': {element: 'input', type: 'text', editable: true, textBased: true},
         'date': {element: 'input', type: 'date', editable: true, textBased: true},
-        'datetime': {element: 'input', type: 'datetime-local', editable: true, textBased: true}, //  Cheating - better supported
+        'datetime': {element: 'input', type: 'datetime', editable: true, textBased: true},
         'datetime-local': {element: 'input', type: 'datetime-local', editable: true, textBased: true},
         'email': {element: 'input', type: 'email', editable: true, textBased: true},
         'month': {element: 'input', type: 'month', editable: true, textBased: true},
@@ -51,9 +51,6 @@ angular.module('dynform', [])
     
     return {
       restrict: 'EM', // supports using directive as element and comment
-      transclude: true,
-      replace: true,
-      template: "<ng-form ng-transclude></ng-form>",
       scope: {
         data: '=ngModel'
       },
@@ -62,10 +59,12 @@ angular.module('dynform', [])
         var newElement = null,
           newChild = null,
           optGroups = {},
-          cbAtt = '';
+          cbAtt = '',
+          foundOne = false,
+          iterElem = element;
         
         //  Check that the required attributes are in place
-        if (attrs.hasOwnProperty('ngModel') && (attrs.hasOwnProperty('template') || attrs.hasOwnProperty('templateUrl'))) {
+        if (attrs.hasOwnProperty('ngModel') && (attrs.hasOwnProperty('template') || attrs.hasOwnProperty('templateUrl')) && !element.hasClass('dynamic-form')) {
           //  Grab the template. either from the template attribute, or from the URL in templateUrl
           (attrs.template ? $q.when($parse(attrs.template)($scope.$parent)) :
             $http.get(attrs.templateUrl, {cache: $templateCache}).then(function (result) {
@@ -91,7 +90,7 @@ angular.module('dynform', [])
                 if (supported[field.type].hasOwnProperty('editable') && supported[field.type].editable) {
                   newElement.attr('name', id);
                   newElement.attr('ng-model', "data['" + id + "']");
-                  $scope.data[id] = '';
+                  // $scope.data[id] = '';
                   if (field.hasOwnProperty('readonly')) {newElement.attr('ng-readonly', field.readonly);}
                   if (field.hasOwnProperty('required')) {newElement.attr('ng-required', field.required);}
                 }
@@ -118,13 +117,13 @@ angular.module('dynform', [])
                   if (field.hasOwnProperty('slaveTo')) {newElement.attr('ng-checked', field.slaveTo);}
                 }
                 else if (field.type === 'checklist') {
-                  $scope.data[id] = {};
+                  // $scope.data[id] = {};
                   if (field.hasOwnProperty('options')) {
                     angular.forEach(field.options, function (option, childId) {
                       newChild = angular.element('<input type="checkbox" />');
                       newChild.attr('name', id + '.' + childId);
                       newChild.attr('ng-model', "data['" + id + "']['" + childId + "']");
-                      $scope.data[id][childId] = '';
+                      // $scope.data[id][childId] = '';
                       if (option.hasOwnProperty('class')) {newChild.attr('ng-class', option['class']);}
                       if (field.hasOwnProperty('disabled')) {newChild.attr('ng-disabled', field.disabled);}
                       if (field.hasOwnProperty('readonly')) {newChild.attr('ng-readonly', field.readonly);}
@@ -143,7 +142,7 @@ angular.module('dynform', [])
                   }
                 }
                 else if (field.type === 'radio') {
-                  $scope.data[id] = '';
+                  // $scope.data[id] = '';
                   if (field.hasOwnProperty('values')) {
                     angular.forEach(field.values, function (label, val) {
                       newChild = angular.element('<input type="radio" />');
@@ -167,7 +166,7 @@ angular.module('dynform', [])
                 else if (field.type === 'select') {
                   if (field.hasOwnProperty('multiple')) {
                     newElement.attr('multiple', field.multiple);
-                    $scope.data[id] = [];
+                    // $scope.data[id] = [];
                   }
                   if (field.hasOwnProperty('hasEmpty')) {newElement.append(angular.element('<option value=""></option>').html(field.hasEmpty));}
                   
@@ -228,7 +227,7 @@ angular.module('dynform', [])
                 }
                 
                 //  Set up default values
-                if (field.hasOwnProperty('default')) {
+                if (field.hasOwnProperty('val')) {
                   $scope.data[id] = field.val;
                 }
                 
@@ -252,7 +251,29 @@ angular.module('dynform', [])
                 newElement = null;
               }
             });
-            $compile(element.contents())($scope);
+            
+            while (!angular.equals(iterElem.parent(), $document) && !angular.equals(iterElem.parent(), angular.element())) {
+              if (['form','ngForm','dynamicForm'].indexOf(attrs.$normalize(angular.lowercase(iterElem.parent()[0].nodeName))) > -1) {
+                foundOne = true;
+                break;
+              }
+              iterElem = iterElem.parent();
+            }
+            
+            if (foundOne) {
+              newElement = angular.element("<ng-form></ng-form>");
+            }
+            else {
+              newElement = angular.element("<form></form>");
+            }
+            element.addClass('dynamic-form');
+            angular.forEach(attrs.$attr, function(attName, attIndex) {
+              newElement.attr(attName, attrs[attIndex]);
+            });
+            newElement.append(element.contents());
+            element.replaceWith(newElement);
+            newElement = null;
+            $compile(element)($scope);
           });
         }
       }

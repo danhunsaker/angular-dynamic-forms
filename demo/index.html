@@ -2,44 +2,62 @@
 <html ng-app="app">
   <head>
     <title>Angular Dynamic Forms Test</title>
+	<link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.css">
 	<style>
+		.nav,
+		.pagination,
+		.carousel a {
+			cursor: pointer;
+		}
+		
+		.fixed {
+			position: fixed;
+		}
+		
+		pre {
+			margin: 1ex 0;
+		}
+		
 		legend {
 			font-weight: bold;
 		}
 		
 		label,
+		form > button,
 		ng-form > button,
+		form > input,
 		ng-form > input {
-			display: inline-block;
-			font-style: italic;
-			width: 20em;
-			margin: 1ex 1em;
+			width: 48%;
+			padding: 1ex 1em;
 		}
 		
-		pre,
-		label input,
-		label select,
-		label textarea {
+		label > input,
+		label > select,
+		label > textarea {
 			float: right;
 		}
 		
-		label div label {
+		label div > label {
 			display: block;
-			margin: 1ex;
+			padding: 1ex;
 		}
 	</style>
   </head>
   <body ng-controller="AppCtrl" ng-cloak="">
-	<pre>stdFormData: {{stdFormData | pretty}}</pre>
-	<dynamic-form template="stdFormTemplate" ng-model="stdFormData">
-		<legend>template= test</legend>
-	</dynamic-form>
-	<pre>urlFormData: {{urlFormData | pretty}}</pre>
-	<dynamic-form template-url="form-template.js" ng-model="urlFormData">
+	<dynamic-form class="col-md-8" template-url="form-template.js" ng-model="urlFormData">
+		<dynamic-form class="col-md-12" template="$parent.stdFormTemplate" ng-model="$parent.stdFormData">
+			<legend>template= test</legend>
+		</dynamic-form>
 		<legend>templateUrl= test</legend>
 	</dynamic-form>
+	<div class="col-md-4">
+		<div class="fixed">
+			<pre>stdFormData: {{stdFormData | pretty}}</pre>
+			<pre>urlFormData: {{urlFormData | pretty}}</pre>
+		</div>
+	</div>
 	<!-- Load scripts at the end for performance. -->
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.js"></script>
 	<script src="../dynamic-forms.js"></script>
 	<script src="app.js"></script>
   </body>
