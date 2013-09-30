@@ -1,7 +1,7 @@
 /**
 * DynamicForms - Build Forms in AngularJS From Nothing But JSON
 * @version v0.0.0 - 2013-09-24
-* @link http://bitbucket.org/danhunsaker/angular-dynaimc-forms
+* @link http://bitbucket.org/danhunsaker/angular-dynamic-forms
 * @license LGPLv3+, http://www.gnu.org/licenses/lgpl-3.0.en.html
 */
 
@@ -45,15 +45,13 @@ angular.module('dynform', [])
         'button': {element: 'button', type: 'button', editable: false, textBased: false},
         'hidden': {element: 'input', type: 'hidden', editable: false, textBased: false},
         'image': {element: 'input', type: 'image', editable: false, textBased: false},
+        'legend': {element: 'legend', editable: false, textBased: false},
         'reset': {element: 'button', type: 'reset', editable: false, textBased: false},
         'submit': {element: 'button', type: 'submit', editable: false, textBased: false}
       };
     
     return {
-      restrict: 'EM', // supports using directive as element and comment
-      scope: {
-        data: '=ngModel'
-      },
+      restrict: 'E', // supports using directive as element only
       link: function ($scope, element, attrs) {
         //  Basic initialization
         var newElement = null,
@@ -61,79 +59,93 @@ angular.module('dynform', [])
           optGroups = {},
           cbAtt = '',
           foundOne = false,
-          iterElem = element;
+          iterElem = element,
+          model = null;
         
         //  Check that the required attributes are in place
-        if (attrs.hasOwnProperty('ngModel') && (attrs.hasOwnProperty('template') || attrs.hasOwnProperty('templateUrl')) && !element.hasClass('dynamic-form')) {
+        if (angular.isDefined(attrs.ngModel) && (angular.isDefined(attrs.template) || angular.isDefined(attrs.templateUrl)) && !element.hasClass('dynamic-form')) {
+          model = $parse(attrs.ngModel)($scope);
           //  Grab the template. either from the template attribute, or from the URL in templateUrl
-          (attrs.template ? $q.when($parse(attrs.template)($scope.$parent)) :
+          (attrs.template ? $q.when($parse(attrs.template)($scope)) :
             $http.get(attrs.templateUrl, {cache: $templateCache}).then(function (result) {
               return result.data;
             })
           ).then(function (template) {
             angular.forEach(template, function (field, id) {
-              if (!supported.hasOwnProperty(field.type) || supported[field.type] === false) {
+              if (!angular.isDefined(supported[field.type]) || supported[field.type] === false) {
                 //  Unsupported.  Create SPAN with field.label as contents
                 newElement = angular.element('<span></span>');
-                if (field.hasOwnProperty('label')) {angular.element(newElement).html(field.label);}
+                if (angular.isDefined(field.label)) {angular.element(newElement).html(field.label);}
+                angular.forEach(field, function (val, attr) {
+                  if (["label", "type"].indexOf(attr) > -1) {return;}
+                  newElement.attr(attr, val);
+                })
                 element.append(newElement);
                 newElement = null;
               }
               else {
                 //  Supported.  Create element (or container) according to type
+                if (!angular.isDefined(field.model)) {
+                  field.model = id;
+                }
+                
                 newElement = angular.element('<' + supported[field.type].element + '></' + supported[field.type].element + '>');
-                if (supported[field.type].hasOwnProperty('type')) {
+                if (angular.isDefined(supported[field.type].type)) {
                   newElement.attr('type', supported[field.type].type);
                 }
                 
                 //  Editable fields (those that can feed models)
-                if (supported[field.type].hasOwnProperty('editable') && supported[field.type].editable) {
+                if (angular.isDefined(supported[field.type].editable) && supported[field.type].editable) {
                   newElement.attr('name', id);
-                  newElement.attr('ng-model', "data['" + id + "']");
-                  // $scope.data[id] = '';
-                  if (field.hasOwnProperty('readonly')) {newElement.attr('ng-readonly', field.readonly);}
-                  if (field.hasOwnProperty('required')) {newElement.attr('ng-required', field.required);}
+                  newElement.attr('ng-model', attrs.ngModel + "['" + field.model + "']");
+                    
+                  if (angular.isDefined(field.readonly)) {newElement.attr('ng-readonly', field.readonly);}
+                  if (angular.isDefined(field.required)) {newElement.attr('ng-required', field.required);}
+                  if (angular.isDefined(field.val)) {model[field.model] = angular.copy(field.val);}
                 }
                 
                 //  Fields based on input type=text
-                if (supported[field.type].hasOwnProperty('textBased') && supported[field.type].textBased) {
-                  if (field.hasOwnProperty('minLength')) {newElement.attr('ng-minlength', field.minLength);}
-                  if (field.hasOwnProperty('maxLength')) {newElement.attr('ng-maxlength', field.maxLength);}
-                  if (field.hasOwnProperty('validate')) {newElement.attr('ng-pattern', field.validate);}
-                  if (field.hasOwnProperty('placeholder')) {newElement.attr('placeholder', field.placeholder);}
+                if (angular.isDefined(supported[field.type].textBased) && supported[field.type].textBased) {
+                  if (angular.isDefined(field.minLength)) {newElement.attr('ng-minlength', field.minLength);}
+                  if (angular.isDefined(field.maxLength)) {newElement.attr('ng-maxlength', field.maxLength);}
+                  if (angular.isDefined(field.validate)) {newElement.attr('ng-pattern', field.validate);}
+                  if (angular.isDefined(field.placeholder)) {newElement.attr('placeholder', field.placeholder);}
                 }
                 
                 //  Special cases
                 if (field.type === 'number' || field.type === 'range') {
-                  if (field.hasOwnProperty('minValue')) {newElement.attr('min', field.minValue);}
-                  if (field.hasOwnProperty('maxValue')) {newElement.attr('max', field.maxValue);}
+                  if (angular.isDefined(field.minValue)) {newElement.attr('min', field.minValue);}
+                  if (angular.isDefined(field.maxValue)) {newElement.attr('max', field.maxValue);}
                   if (field.type === 'range') {
-                    if (field.hasOwnProperty('step')) {newElement.attr('step', field.step);}
+                    if (angular.isDefined(field.step)) {newElement.attr('step', field.step);}
                   }
                 }
+                else if (['text', 'textarea'].indexOf(field.type) > -1) {
+                  if (angular.isDefined(field.splitBy)) {newElement.attr('ng-list', field.splitBy);}
+                }
                 else if (field.type === 'checkbox') {
-                  if (field.hasOwnProperty('isOn')) {newElement.attr('ng-true-value', field.isOn);}
-                  if (field.hasOwnProperty('isOff')) {newElement.attr('ng-false-value', field.isOff);}
-                  if (field.hasOwnProperty('slaveTo')) {newElement.attr('ng-checked', field.slaveTo);}
+                  if (angular.isDefined(field.isOn)) {newElement.attr('ng-true-value', field.isOn);}
+                  if (angular.isDefined(field.isOff)) {newElement.attr('ng-false-value', field.isOff);}
+                  if (angular.isDefined(field.slaveTo)) {newElement.attr('ng-checked', field.slaveTo);}
                 }
                 else if (field.type === 'checklist') {
-                  // $scope.data[id] = {};
-                  if (field.hasOwnProperty('options')) {
+                  if (angular.isDefined(field.val)) {model[field.model] = angular.copy(field.val);}
+                  if (angular.isDefined(field.options)) {
                     angular.forEach(field.options, function (option, childId) {
                       newChild = angular.element('<input type="checkbox" />');
                       newChild.attr('name', id + '.' + childId);
-                      newChild.attr('ng-model', "data['" + id + "']['" + childId + "']");
-                      // $scope.data[id][childId] = '';
-                      if (option.hasOwnProperty('class')) {newChild.attr('ng-class', option['class']);}
-                      if (field.hasOwnProperty('disabled')) {newChild.attr('ng-disabled', field.disabled);}
-                      if (field.hasOwnProperty('readonly')) {newChild.attr('ng-readonly', field.readonly);}
-                      if (field.hasOwnProperty('required')) {newChild.attr('ng-required', field.required);}
-                      if (field.hasOwnProperty('callback')) {newChild.attr('ng-change', field.callback);}
-                      if (option.hasOwnProperty('isOn')) {newChild.attr('ng-true-value', option.isOn);}
-                      if (option.hasOwnProperty('isOff')) {newChild.attr('ng-false-value', option.isOff);}
-                      if (option.hasOwnProperty('slaveTo')) {newChild.attr('ng-checked', option.slaveTo);}
+                      newChild.attr('ng-model', attrs.ngModel + "['" + field.model + "']" + "['" + childId + "']");
+                      if (angular.isDefined(option['class'])) {newChild.attr('ng-class', option['class']);}
+                      if (angular.isDefined(field.disabled)) {newChild.attr('ng-disabled', field.disabled);}
+                      if (angular.isDefined(field.readonly)) {newChild.attr('ng-readonly', field.readonly);}
+                      if (angular.isDefined(field.required)) {newChild.attr('ng-required', field.required);}
+                      if (angular.isDefined(field.callback)) {newChild.attr('ng-change', field.callback);}
+                      if (angular.isDefined(option.isOn)) {newChild.attr('ng-true-value', option.isOn);}
+                      if (angular.isDefined(option.isOff)) {newChild.attr('ng-false-value', option.isOff);}
+                      if (angular.isDefined(option.slaveTo)) {newChild.attr('ng-checked', option.slaveTo);}
+                      if (angular.isDefined(option.val)) {model[field.model][childId] = angular.copy(option.val);}
                       
-                      if (option.hasOwnProperty('label')) {
+                      if (angular.isDefined(option.label)) {
                           newChild = newChild.wrap('<label></label>').parent();
                           newChild.append(document.createTextNode(' ' + option.label));
                       }
@@ -142,17 +154,17 @@ angular.module('dynform', [])
                   }
                 }
                 else if (field.type === 'radio') {
-                  // $scope.data[id] = '';
-                  if (field.hasOwnProperty('values')) {
+                  if (angular.isDefined(field.val)) {model[field.model] = angular.copy(field.val);}
+                  if (angular.isDefined(field.values)) {
                     angular.forEach(field.values, function (label, val) {
                       newChild = angular.element('<input type="radio" />');
                       newChild.attr('name', id);
-                      newChild.attr('ng-model', "data['" + id + "']");
-                      if (field.hasOwnProperty('class')) {newChild.attr('ng-class', field['class']);}
-                      if (field.hasOwnProperty('disabled')) {newChild.attr('ng-disabled', field.disabled);}
-                      if (field.hasOwnProperty('callback')) {newChild.attr('ng-change', field.callback);}
-                      if (field.hasOwnProperty('readonly')) {newChild.attr('ng-readonly', field.readonly);}
-                      if (field.hasOwnProperty('required')) {newChild.attr('ng-required', field.required);}
+                      newChild.attr('ng-model', attrs.ngModel + "['" + field.model + "']");
+                      if (angular.isDefined(field['class'])) {newChild.attr('ng-class', field['class']);}
+                      if (angular.isDefined(field.disabled)) {newChild.attr('ng-disabled', field.disabled);}
+                      if (angular.isDefined(field.callback)) {newChild.attr('ng-change', field.callback);}
+                      if (angular.isDefined(field.readonly)) {newChild.attr('ng-readonly', field.readonly);}
+                      if (angular.isDefined(field.required)) {newChild.attr('ng-required', field.required);}
                       if (val) {newChild.attr('value', val);}
                       
                       if (label) {
@@ -164,23 +176,23 @@ angular.module('dynform', [])
                   }
                 }
                 else if (field.type === 'select') {
-                  if (field.hasOwnProperty('multiple')) {
+                  if (angular.isDefined(field.multiple)) {
                     newElement.attr('multiple', field.multiple);
-                    // $scope.data[id] = [];
                   }
-                  if (field.hasOwnProperty('hasEmpty')) {newElement.append(angular.element('<option value=""></option>').html(field.hasEmpty));}
+                  if (angular.isDefined(field.empty) && field.empty !== false) {newElement.append(angular.element('<option value=""></option>').html(field.empty));}
                   
-                  if (field.hasOwnProperty('autoOptions')) {
+                  if (angular.isDefined(field.autoOptions)) {
                     newElement.attr('ng-options', field.autoOptions);
                   }
-                  else if (field.hasOwnProperty('options')) {
+                  else if (angular.isDefined(field.options)) {
                     angular.forEach(field.options, function (option, childId) {
                       newChild = angular.element('<option></option>');
                       newChild.attr('value', childId);
-                      if (option.hasOwnProperty('disabled')) {newChild.attr('ng-disabled', option.disabled);}
-                      if (option.hasOwnProperty('label')) {newChild.html(option.label);}
-                      if (option.hasOwnProperty('group')) {
-                        if (!optGroups.hasOwnProperty(option.group)) {
+                      if (angular.isDefined(option.disabled)) {newChild.attr('ng-disabled', option.disabled);}
+                      if (angular.isDefined(option.slaveTo)) {newChild.attr('ng-selected', option.slaveTo);}
+                      if (angular.isDefined(option.label)) {newChild.html(option.label);}
+                      if (angular.isDefined(option.group)) {
+                        if (!angular.isDefined(optGroups[option.group])) {
                           optGroups[option.group] = angular.element('<optgroup></optgroup>');
                           optGroups[option.group].attr('label', option.group);
                         }
@@ -198,21 +210,30 @@ angular.module('dynform', [])
                   }
                 }
                 else if (field.type === 'image') {
-                  if (field.hasOwnProperty('label')) {newElement.attr('alt', field.label);}
-                  if (field.hasOwnProperty('source')) {newElement.attr('src', field.source);}
+                  if (angular.isDefined(field.label)) {newElement.attr('alt', field.label);}
+                  if (angular.isDefined(field.source)) {newElement.attr('src', field.source);}
                 }
                 else if (field.type === 'hidden') {
                   newElement.attr('name', id);
-                  newElement.attr('ng-model', "data['" + id + "']");
+                  newElement.attr('ng-model', attrs.ngModel + "['" + field.model + "']");
+                  if (angular.isDefined(field.val)) {
+                    model[field.model] = angular.copy(field.val);
+                    newElement.attr('value', field.val);
+                  }
+                }
+                else if (field.type === 'file') {
+                  if (angular.isDefined(field.multiple)) {
+                    newElement.attr('multiple', field.multiple);
+                  }
                 }
                 
                 //  Common attributes; radio already applied these...
                 if (field.type !== "radio") {
-                  if (field.hasOwnProperty('class')) {newElement.attr('ng-class', field['class']);}
+                  if (angular.isDefined(field['class'])) {newElement.attr('ng-class', field['class']);}
                   //  ...and checklist has already applied these.
                   if (field.type !== "checklist") {
-                    if (field.hasOwnProperty('disabled')) {newElement.attr('ng-disabled', field.disabled);}
-                    if (field.hasOwnProperty('callback')) {
+                    if (angular.isDefined(field.disabled)) {newElement.attr('ng-disabled', field.disabled);}
+                    if (angular.isDefined(field.callback)) {
                       //  Some input types need listeners on click...
                       if (["button", "submit", "reset", "image"].indexOf(field.type) > -1) {
                         cbAtt = 'ng-click';
@@ -226,19 +247,14 @@ angular.module('dynform', [])
                   }
                 }
                 
-                //  Set up default values
-                if (field.hasOwnProperty('val')) {
-                  $scope.data[id] = field.val;
-                }
-                
                 //  If there's a label, add it.
-                if (field.hasOwnProperty('label')) {
+                if (angular.isDefined(field.label)) {
                   //  Some elements have already applied their labels.
                   if (["image", "hidden"].indexOf(field.type) > -1) {
                     angular.noop();
                   }
                   //  Button elements get their labels from their contents.
-                  else if (["button", "submit", "reset"].indexOf(field.type) > -1) {
+                  else if (["button", "legend", "reset", "submit"].indexOf(field.type) > -1) {
                     newElement.html(field.label);
                   }
                   //  Everything else should be wrapped in a label tag.
@@ -259,43 +275,123 @@ angular.module('dynform', [])
               }
               iterElem = iterElem.parent();
             }
-            
             if (foundOne) {
               newElement = angular.element("<ng-form></ng-form>");
             }
             else {
               newElement = angular.element("<form></form>");
             }
+            
             element.addClass('dynamic-form');
             angular.forEach(attrs.$attr, function(attName, attIndex) {
               newElement.attr(attName, attrs[attIndex]);
             });
+            newElement.attr('model', attrs.ngModel);
+            newElement.removeAttr('ng-model');
+            angular.forEach(element[0].classList, function(clsName) {
+              newElement[0].classList.add(clsName);
+            });
             newElement.append(element.contents());
+            $compile(newElement)($scope);
             element.replaceWith(newElement);
             newElement = null;
-            $compile(element)($scope);
           });
         }
       }
     };
   }])
+  //  Following code was adapted from http://odetocode.com/blogs/scott/archive/2013/07/05/a-file-input-directive-for-angularjs.aspx
   .directive('input', ['$parse', function ($parse) {
       return {
           restrict: "E",
-          link: function (scope, element, attrs) {
+          require: "?ngModel",
+          link: function (scope, element, attrs, ctrl) {
             if (attrs.type === 'file') {
               var modelGet = $parse(attrs.ngModel),
                 modelSet = modelGet.assign,
                 onChange = $parse(attrs.onChange),
                 updateModel = function () {
                   scope.$apply(function () {
-                      modelSet(scope, element[0].files[0]);
-                      onChange(scope);
+                    modelSet(scope, element[0].files);
+                    onChange(scope);
                   });                    
                 };
-               
+              
+              ctrl.$render = function () {
+                element[0].files = this.$viewValue;
+              };
               element.bind('change', updateModel);
+            }
+            else if (attrs.type === 'range') {
+              ctrl.$parsers.push(function (val) {
+                if (val) {
+                  return parseFloat(val);
+                }
+              });
             }
           }
       };
+  }])
+  //  Following code was adapted from http://odetocode.com/blogs/scott/archive/2013/07/03/building-a-filereader-service-for-angularjs-the-service.aspx
+  .factory("fileReader", ["$q", function ($q) {
+    var onLoad = function(reader, deferred, scope) {
+        return function () {
+          scope.$apply(function () {
+            deferred.resolve(reader.result);
+          });
+        };
+      },
+      onError = function (reader, deferred, scope) {
+        return function () {
+          scope.$apply(function () {
+            deferred.reject(reader.error);
+          });
+        };
+      },
+      onProgress = function(reader, scope) {
+        return function (event) {
+          scope.$broadcast("fileProgress",
+            {
+              total: event.total,
+              loaded: event.loaded,
+              status: reader.readyState
+            });
+        };
+      },
+      getReader = function(deferred, scope) {
+        var reader = new FileReader();
+        reader.onload = onLoad(reader, deferred, scope);
+        reader.onerror = onError(reader, deferred, scope);
+        reader.onprogress = onProgress(reader, scope);
+        return reader;
+      };
+
+    return {
+      readAsArrayBuffer: function (file, scope) {
+        var deferred = $q.defer(),
+          reader = getReader(deferred, scope);         
+        reader.readAsArrayBuffer(file);
+        return deferred.promise;
+      },
+      readAsBinaryString: function (file, scope) {
+        var deferred = $q.defer(),
+          reader = getReader(deferred, scope);         
+        reader.readAsBinaryString(file);
+        return deferred.promise;
+      },
+      readAsDataURL: function (file, scope) {
+        var deferred = $q.defer(),
+          reader = getReader(deferred, scope);         
+        reader.readAsDataURL(file);
+        return deferred.promise;
+      },
+      readAsText: function (file, scope) {
+        var deferred = $q.defer(),
+          reader = getReader(deferred, scope);         
+        reader.readAsText(file);
+        return deferred.promise;
+      }
+    };
   }]);
+
+/*  End of dynamic-forms.js */

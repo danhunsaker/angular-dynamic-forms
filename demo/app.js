@@ -8,63 +8,89 @@ angular.module('app', ['dynform'])
       },
       "date": {
         "type": "date",
-        "label": "date"
+        "label": "date",
+        "placeholder": "date"
       },
       "datetime": {
         "type": "datetime",
-        "label": "datetime"
+        "label": "datetime",
+        "placeholder": "datetime"
       },
       "datetime-local": {
         "type": "datetime-local",
-        "label": "datetime-local"
+        "label": "datetime-local",
+        "placeholder": "datetime-local"
       },
       "email": {
         "type": "email",
-        "label": "email"
+        "label": "email",
+        "placeholder": "email"
       },
       "month": {
         "type": "month",
-        "label": "month"
+        "label": "month",
+        "placeholder": "month"
       },
       "number": {
         "type": "number",
-        "label": "number"
+        "label": "number",
+        "placeholder": "number"
       },
       "password": {
         "type": "password",
-        "label": "password"
+        "label": "password",
+        "placeholder": "password"
       },
       "search": {
         "type": "search",
-        "label": "search"
+        "label": "search",
+        "placeholder": "search"
       },
       "tel": {
         "type": "tel",
-        "label": "tel"
+        "label": "tel",
+        "placeholder": "tel"
       },
       "textarea": {
         "type": "textarea",
-        "label": "textarea"
+        "label": "textarea",
+        "placeholder": "textarea"
       },
       "time": {
         "type": "time",
-        "label": "time"
+        "label": "time",
+        "placeholder": "time"
       },
       "url": {
         "type": "url",
-        "label": "url"
+        "label": "url",
+        "placeholder": "url"
       },
       "week": {
         "type": "week",
-        "label": "week"
+        "label": "week",
+        "placeholder": "week"
       },
       "checkbox": {
         "type": "checkbox",
         "label": "checkbox"
       },
+      "color": {
+        "type": "color",
+        "label": "color"
+      },
+      "file": {
+        "type": "file",
+        "label": "file",
+        "multiple": true
+      },
       "range": {
         "type": "range",
-        "label": "range"
+        "label": "range",
+        "model": "number",
+        "val": 42,
+        "minValue": -42,
+        "maxValue": 84
       },
       "select": {
         "type": "select",
@@ -73,14 +99,6 @@ angular.module('app', ['dynform'])
       "checklist": {
         "type": "checklist",
         "label": "checklist"
-      },
-      "color": {
-        "type": "color",
-        "label": "color"
-      },
-      "file": {
-        "type": "file",
-        "label": "file"
       },
       "radio": {
         "type": "radio",
@@ -97,6 +115,10 @@ angular.module('app', ['dynform'])
       "image": {
         "type": "image",
         "label": "image"
+      },
+      "legend": {
+        "type": "legend",
+        "label": "legend"
       },
       "reset": {
         "type": "reset",

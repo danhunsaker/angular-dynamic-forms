@@ -12,6 +12,13 @@
 		
 		.fixed {
 			position: fixed;
+			margin: 0;
+		}
+		
+		div.fixed {
+			overflow-y: auto;
+			height: 100%;
+			margin-left: -15px;
 		}
 		
 		pre {
@@ -23,6 +30,7 @@
 		}
 		
 		label,
+		span,
 		form > button,
 		ng-form > button,
 		form > input,
@@ -45,13 +53,13 @@
   </head>
   <body ng-controller="AppCtrl" ng-cloak="">
 	<dynamic-form class="col-md-8" template-url="form-template.js" ng-model="urlFormData">
-		<dynamic-form class="col-md-12" template="$parent.stdFormTemplate" ng-model="$parent.stdFormData">
+		<dynamic-form class="col-md-12" template="stdFormTemplate" ng-model="stdFormData">
 			<legend>template= test</legend>
 		</dynamic-form>
 		<legend>templateUrl= test</legend>
 	</dynamic-form>
 	<div class="col-md-4">
-		<div class="fixed">
+		<div class="fixed col-md-4">
 			<pre>stdFormData: {{stdFormData | pretty}}</pre>
 			<pre>urlFormData: {{urlFormData | pretty}}</pre>
 		</div>
