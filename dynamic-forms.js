@@ -15,7 +15,7 @@
 * @example <dynamic-form template-url="form-template.js" ng-model="formData"></dynamic-form>
 */
 angular.module('dynform', [])
-  .directive('dynamicForm', ['$q', '$parse', '$http', '$templateCache', '$compile', '$document', function ($q, $parse, $http, $templateCache, $compile, $document) {
+  .directive('dynamicForm', ['$q', '$parse', '$http', '$templateCache', '$compile', '$document', '$timeout', function ($q, $parse, $http, $templateCache, $compile, $document, $timeout) {
     var supported = {
         //  Text-based elements
         'text': {element: 'input', type: 'text', editable: true, textBased: true},
@@ -96,12 +96,15 @@ angular.module('dynform', [])
                 
                 //  Editable fields (those that can feed models)
                 if (angular.isDefined(supported[field.type].editable) && supported[field.type].editable) {
-                  newElement.attr('name', id);
+                  newElement.attr('name', field.model);
                   newElement.attr('ng-model', attrs.ngModel + "['" + field.model + "']");
                     
                   if (angular.isDefined(field.readonly)) {newElement.attr('ng-readonly', field.readonly);}
                   if (angular.isDefined(field.required)) {newElement.attr('ng-required', field.required);}
-                  if (angular.isDefined(field.val)) {model[field.model] = angular.copy(field.val);}
+                  if (angular.isDefined(field.val)) {
+                    model[field.model] = angular.copy(field.val);
+                    newElement.attr('value', field.val);
+                  }
                 }
                 
                 //  Fields based on input type=text
@@ -133,7 +136,7 @@ angular.module('dynform', [])
                   if (angular.isDefined(field.options)) {
                     angular.forEach(field.options, function (option, childId) {
                       newChild = angular.element('<input type="checkbox" />');
-                      newChild.attr('name', id + '.' + childId);
+                      newChild.attr('name', field.model + '.' + childId);
                       newChild.attr('ng-model', attrs.ngModel + "['" + field.model + "']" + "['" + childId + "']");
                       if (angular.isDefined(option['class'])) {newChild.attr('ng-class', option['class']);}
                       if (angular.isDefined(field.disabled)) {newChild.attr('ng-disabled', field.disabled);}
@@ -143,7 +146,10 @@ angular.module('dynform', [])
                       if (angular.isDefined(option.isOn)) {newChild.attr('ng-true-value', option.isOn);}
                       if (angular.isDefined(option.isOff)) {newChild.attr('ng-false-value', option.isOff);}
                       if (angular.isDefined(option.slaveTo)) {newChild.attr('ng-checked', option.slaveTo);}
-                      if (angular.isDefined(option.val)) {model[field.model][childId] = angular.copy(option.val);}
+                      if (angular.isDefined(option.val)) {
+                        model[field.model][childId] = angular.copy(option.val);
+                        newChlid.attr('value', field.val);
+                      }
                       
                       if (angular.isDefined(option.label)) {
                           newChild = newChild.wrap('<label></label>').parent();
@@ -158,14 +164,15 @@ angular.module('dynform', [])
                   if (angular.isDefined(field.values)) {
                     angular.forEach(field.values, function (label, val) {
                       newChild = angular.element('<input type="radio" />');
-                      newChild.attr('name', id);
+                      newChild.attr('name', field.model);
                       newChild.attr('ng-model', attrs.ngModel + "['" + field.model + "']");
                       if (angular.isDefined(field['class'])) {newChild.attr('ng-class', field['class']);}
                       if (angular.isDefined(field.disabled)) {newChild.attr('ng-disabled', field.disabled);}
                       if (angular.isDefined(field.callback)) {newChild.attr('ng-change', field.callback);}
                       if (angular.isDefined(field.readonly)) {newChild.attr('ng-readonly', field.readonly);}
                       if (angular.isDefined(field.required)) {newChild.attr('ng-required', field.required);}
-                      if (val) {newChild.attr('value', val);}
+                      newChild.attr('value', val);
+                      if (angular.isDefined(field.val) && field.val === val) {newChild.attr('checked', 'checked');}
                       
                       if (label) {
                           newChild = newChild.wrap('<label></label>').parent();
@@ -176,9 +183,7 @@ angular.module('dynform', [])
                   }
                 }
                 else if (field.type === 'select') {
-                  if (angular.isDefined(field.multiple)) {
-                    newElement.attr('multiple', field.multiple);
-                  }
+                  if (angular.isDefined(field.multiple) && field.multiple !== false) {newElement.attr('multiple', 'multiple');}
                   if (angular.isDefined(field.empty) && field.empty !== false) {newElement.append(angular.element('<option value=""></option>').html(field.empty));}
                   
                   if (angular.isDefined(field.autoOptions)) {
@@ -214,7 +219,7 @@ angular.module('dynform', [])
                   if (angular.isDefined(field.source)) {newElement.attr('src', field.source);}
                 }
                 else if (field.type === 'hidden') {
-                  newElement.attr('name', id);
+                  newElement.attr('name', field.model);
                   newElement.attr('ng-model', attrs.ngModel + "['" + field.model + "']");
                   if (angular.isDefined(field.val)) {
                     model[field.model] = angular.copy(field.val);
@@ -235,7 +240,7 @@ angular.module('dynform', [])
                     if (angular.isDefined(field.disabled)) {newElement.attr('ng-disabled', field.disabled);}
                     if (angular.isDefined(field.callback)) {
                       //  Some input types need listeners on click...
-                      if (["button", "submit", "reset", "image"].indexOf(field.type) > -1) {
+                      if (["button", "image", "legend", "reset", "submit"].indexOf(field.type) > -1) {
                         cbAtt = 'ng-click';
                       }
                       //  ...the rest on change.
@@ -268,6 +273,7 @@ angular.module('dynform', [])
               }
             });
             
+            //  Determine what tag name to use (ng-form if nested; form if outermost)
             while (!angular.equals(iterElem.parent(), $document) && !angular.equals(iterElem.parent(), angular.element())) {
               if (['form','ngForm','dynamicForm'].indexOf(attrs.$normalize(angular.lowercase(iterElem.parent()[0].nodeName))) > -1) {
                 foundOne = true;
@@ -282,7 +288,8 @@ angular.module('dynform', [])
               newElement = angular.element("<form></form>");
             }
             
-            element.addClass('dynamic-form');
+            //  Psuedo-transclusion
+            newElement.addClass('dynamic-form');
             angular.forEach(attrs.$attr, function(attName, attIndex) {
               newElement.attr(attName, attrs[attIndex]);
             });
@@ -292,9 +299,26 @@ angular.module('dynform', [])
               newElement[0].classList.add(clsName);
             });
             newElement.append(element.contents());
+            
+            //  onReset logic
+            newElement.data('$_cleanModel', angular.copy(model));
+            newElement.bind('reset', function () {
+              $timeout(function () {
+                $scope.$broadcast('reset', arguments);
+              }, 0);
+            });
+            $scope.$on('reset', function () {
+              $scope.$apply(function () {
+                $scope[attrs.ngModel] = {};
+              });
+              $scope.$apply(function () {
+                $scope[attrs.ngModel] = angular.copy(newElement.data('$_cleanModel'));
+              });
+            });
+            
+            //  Compile and update DOM
             $compile(newElement)($scope);
             element.replaceWith(newElement);
-            newElement = null;
           });
         }
       }
@@ -303,8 +327,8 @@ angular.module('dynform', [])
   //  Following code was adapted from http://odetocode.com/blogs/scott/archive/2013/07/05/a-file-input-directive-for-angularjs.aspx
   .directive('input', ['$parse', function ($parse) {
       return {
-          restrict: "E",
-          require: "?ngModel",
+          restrict: 'E',
+          require: '?ngModel',
           link: function (scope, element, attrs, ctrl) {
             if (attrs.type === 'file') {
               var modelGet = $parse(attrs.ngModel),
@@ -333,7 +357,7 @@ angular.module('dynform', [])
       };
   }])
   //  Following code was adapted from http://odetocode.com/blogs/scott/archive/2013/07/03/building-a-filereader-service-for-angularjs-the-service.aspx
-  .factory("fileReader", ["$q", function ($q) {
+  .factory('fileReader', ['$q', function ($q) {
     var onLoad = function(reader, deferred, scope) {
         return function () {
           scope.$apply(function () {
@@ -350,7 +374,7 @@ angular.module('dynform', [])
       },
       onProgress = function(reader, scope) {
         return function (event) {
-          scope.$broadcast("fileProgress",
+          scope.$broadcast('fileProgress',
             {
               total: event.total,
               loaded: event.loaded,
