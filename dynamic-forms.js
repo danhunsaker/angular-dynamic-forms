@@ -134,6 +134,7 @@ angular.module('dynform', [])
                 else if (field.type === 'checklist') {
                   if (angular.isDefined(field.val)) {model[field.model] = angular.copy(field.val);}
                   if (angular.isDefined(field.options)) {
+                    model[field.model] = {};
                     angular.forEach(field.options, function (option, childId) {
                       newChild = angular.element('<input type="checkbox" />');
                       newChild.attr('name', field.model + '.' + childId);
@@ -209,7 +210,9 @@ angular.module('dynform', [])
                     });
                     
                     if (!angular.equals(optGroups, {})) {
-                      newElement.append(optGroups);
+                      angular.forEach(optGroups, function (optGroup) {
+                        newElement.append(optGroup);
+                      });
                       optGroups = {};
                     }
                   }
@@ -289,7 +292,6 @@ angular.module('dynform', [])
             }
             
             //  Psuedo-transclusion
-            newElement.addClass('dynamic-form');
             angular.forEach(attrs.$attr, function(attName, attIndex) {
               newElement.attr(attName, attrs[attIndex]);
             });
@@ -298,6 +300,7 @@ angular.module('dynform', [])
             angular.forEach(element[0].classList, function(clsName) {
               newElement[0].classList.add(clsName);
             });
+            newElement.addClass('dynamic-form');
             newElement.append(element.contents());
             
             //  onReset logic
@@ -324,37 +327,85 @@ angular.module('dynform', [])
       }
     };
   }])
-  //  Following code was adapted from http://odetocode.com/blogs/scott/archive/2013/07/05/a-file-input-directive-for-angularjs.aspx
-  .directive('input', ['$parse', function ($parse) {
-      return {
-          restrict: 'E',
-          require: '?ngModel',
-          link: function (scope, element, attrs, ctrl) {
-            if (attrs.type === 'file') {
-              var modelGet = $parse(attrs.ngModel),
-                modelSet = modelGet.assign,
-                onChange = $parse(attrs.onChange),
-                updateModel = function () {
-                  scope.$apply(function () {
-                    modelSet(scope, element[0].files);
-                    onChange(scope);
-                  });                    
-                };
-              
-              ctrl.$render = function () {
-                element[0].files = this.$viewValue;
-              };
-              element.bind('change', updateModel);
+  //  Not a fan of how Angular's ngList is implemented, so here's a better one (IMO).  It will ONLY
+  //  apply to <dynamic-form> child elements, and replaces the ngList that ships with Angular.
+  .directive('ngList', [function () {
+    return {
+      require: '?ngModel',
+      link: function (scope, element, attr, ctrl) {
+        var match = /\/(.*)\//.exec(element.attr(attr.$attr.ngList)),
+          separator = match && new RegExp(match[1]) || element.attr(attr.$attr.ngList) || ',';
+        
+        if (element[0].form !== null && !angular.element(element[0].form).hasClass('dynamic-form')) {
+          return;
+        }
+        
+        ctrl.$parsers.splice(0, 1);
+        ctrl.$formatters.splice(0, 1);
+        
+        ctrl.$parsers.push(function(viewValue) {
+          var list = [];
+          
+          if (angular.isString(viewValue)) {
+            //  Don't have Angular's trim() exposed, so let's simulate it:
+            if (String.prototype.trim) {
+              angular.forEach(viewValue.split(separator), function(value) {
+                if (value) list.push(value.trim());
+              });
             }
-            else if (attrs.type === 'range') {
-              ctrl.$parsers.push(function (val) {
-                if (val) {
-                  return parseFloat(val);
-                }
+            else {
+              angular.forEach(viewValue.split(separator), function(value) {
+                if (value) list.push(value.replace(/^\s*/, '').replace(/\s*$/, ''));
               });
             }
           }
-      };
+          
+          return list;
+        });
+
+        ctrl.$formatters.push(function(val) {
+          var joinBy = angular.isString(separator) && separator || ', ';
+          
+          if (angular.isArray(val)) {
+            return val.join(joinBy);
+          }
+          
+          return undefined;
+        });
+      }
+    };
+  }])
+  //  Following code was adapted from http://odetocode.com/blogs/scott/archive/2013/07/05/a-file-input-directive-for-angularjs.aspx
+  .directive('input', ['$parse', function ($parse) {
+    return {
+      restrict: 'E',
+      require: '?ngModel',
+      link: function (scope, element, attrs, ctrl) {
+        if (attrs.type === 'file') {
+          var modelGet = $parse(attrs.ngModel),
+            modelSet = modelGet.assign,
+            onChange = $parse(attrs.onChange),
+            updateModel = function () {
+              scope.$apply(function () {
+                modelSet(scope, element[0].files);
+                onChange(scope);
+              });                    
+            };
+          
+          ctrl.$render = function () {
+            element[0].files = this.$viewValue;
+          };
+          element.bind('change', updateModel);
+        }
+        else if (attrs.type === 'range') {
+          ctrl.$parsers.push(function (val) {
+            if (val) {
+              return parseFloat(val);
+            }
+          });
+        }
+      }
+    };
   }])
   //  Following code was adapted from http://odetocode.com/blogs/scott/archive/2013/07/03/building-a-filereader-service-for-angularjs-the-service.aspx
   .factory('fileReader', ['$q', function ($q) {

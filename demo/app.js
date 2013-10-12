@@ -54,7 +54,9 @@ angular.module('app', ['dynform'])
       "textarea": {
         "type": "textarea",
         "label": "textarea",
-        "placeholder": "textarea"
+        "placeholder": "textarea",
+        "splitBy": "\n",
+        "val": ["This array should be","separated by new lines"]
       },
       "time": {
         "type": "time",
@@ -94,15 +96,71 @@ angular.module('app', ['dynform'])
       },
       "select": {
         "type": "select",
-        "label": "select"
+        "label": "select",
+        "empty": "nothing selected",
+        "options": {
+          "first": {
+            "label": "first option"
+          },
+          "second": {
+            "label": "second option",
+            "group": "first group"
+          },
+          "third": {
+            "label": "third option",
+            "group": "second group"
+          },
+          "fourth": {
+            "label": "fourth option",
+            "group": "first group"
+          },
+          "fifth": {
+            "label": "fifth option"
+          },
+          "sixth": {
+            "label": "sixth option",
+            "group": "second group"
+          },
+          "seventh": {
+            "label": "seventh option"
+          },
+          "eighth": {
+            "label": "eighth option",
+            "group": "first group"
+          },
+          "ninth": {
+            "label": "ninth option",
+            "group": "second group"
+          },
+          "tenth": {
+            "label": "tenth option"
+          }
+        }
       },
       "checklist": {
         "type": "checklist",
-        "label": "checklist"
+        "label": "checklist",
+        "options": {
+          "first": {
+            "label": "first option"
+          },
+          "second": {
+            "label": "second option",
+            "isOn": "on",
+            "isOff": "off"
+          }
+        }
       },
       "radio": {
         "type": "radio",
-        "label": "radio"
+        "label": "radio",
+        "values": {
+          "first": "first option",
+          "second": "second option",
+          "third": "third option",
+          "fourth": "fourth option",
+          "fifth": "fifth option"
+        }
       },
       "button": {
         "type": "button",
@@ -110,11 +168,13 @@ angular.module('app', ['dynform'])
       },
       "hidden": {
         "type": "hidden",
-        "label": "hidden"
+        "label": "hidden",
+        "val": "hidden"
       },
       "image": {
         "type": "image",
-        "label": "image"
+        "label": "image",
+        "source": "http://angularjs.org/img/AngularJS-large.png"
       },
       "legend": {
         "type": "legend",

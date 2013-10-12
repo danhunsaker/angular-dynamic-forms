@@ -4,7 +4,8 @@ Build Forms in AngularJS From Nothing But JSON
 
 Installation
 ------------
-Copy `dynamic-forms.js` into your project wherever your other assets reside.
+1. Clone the project from either [GitHub][] or [BitBucket][] - whichever you prefer.
+2. Copy `dynamic-forms.js` into your project wherever your other assets reside.
 
 Use
 ---
@@ -51,8 +52,8 @@ As with any other [AngularJS][] module:
 
 And that's about it!
 
-Full Specification
-------------------
+The TL;DR Version
+-----------------
 ### The Directive ###
 You invoke the `dynamic-form` directive using an element (`<dynamic-form></dynamic-form>`) - other
 options (such as class, attribute, and comment) are unsupported (for now).  The directive requires
@@ -165,6 +166,8 @@ what][formsupport])
         * The key of each child object specifies the key to associate with the checkbox it describes
         * `class`: applies a specific [`ng-class`][] to the current checkbox, independently of the
             rest
+        * `label`: operates identically to the standard `label` option, but applies to a specific
+            checkbox in the list
         * See the [checkbox](#checkbox) type for other fields supported here
 * __Other Notes:__
     * This is a convenience type, used to tie a group of [checkbox](#checkbox) controls together
@@ -425,6 +428,14 @@ Acknowledgements
 * [K. Scott Allen][] for the [file input directive][filedirective] and the [FileReader
     service][fileservice] adapted for use here.
 
+Issues And Assistance
+---------------------
+If you notice a problem, let me know about it on [GitHub][issues-github] or
+[Bitbucket][issues-bitbucket]!
+
+Any and all help is welcome; just fork the project on either [GitHub][] or [BitBucket][] (whichever
+you prefer), and submit a pull request with your contribution(s)!
+
 [colorsupport]: http://caniuse.com/input-color
 [datesupport]: http://caniuse.com/input-datetime
 [filedirective]: http://odetocode.com/blogs/scott/archive/2013/07/05/a-file-input-directive-for-angularjs.aspx
@@ -434,6 +445,8 @@ Acknowledgements
 [pholdsupport]: http://caniuse.com/input-placeholder
 [rangesupport]: http://caniuse.com/input-range
 
+[GitHub]: https://github.com/danhunsaker/angular-dynamic-forms
+[BitBucket]: https://bitbucket.org/danhunsaker/angular-dynamic-forms
 [issues-github]: https://github.com/danhunsaker/angular-dynamic-forms/issues
 [issues-bitbucket]: https://bitbucket.org/danhunsaker/angular-dynamic-forms/issues
 
