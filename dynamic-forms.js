@@ -1,6 +1,6 @@
 /**
 * DynamicForms - Build Forms in AngularJS From Nothing But JSON
-* @version v0.0.0 - 2013-09-24
+* @version v0.0.1 - 2014-03-13
 * @link http://bitbucket.org/danhunsaker/angular-dynamic-forms
 * @license LGPLv3+, http://www.gnu.org/licenses/lgpl-3.0.en.html
 */
@@ -134,7 +134,7 @@ angular.module('dynform', [])
                 else if (field.type === 'checklist') {
                   if (angular.isDefined(field.val)) {model[field.model] = angular.copy(field.val);}
                   if (angular.isDefined(field.options)) {
-                    model[field.model] = {};
+                    if ( ! (angular.isDefined(model[field.model]) && angular.isObject(model[field.model]))) {model[field.model] = {};}
                     angular.forEach(field.options, function (option, childId) {
                       newChild = angular.element('<input type="checkbox" />');
                       newChild.attr('name', field.model + '.' + childId);
