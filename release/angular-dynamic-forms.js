@@ -29,56 +29,66 @@ angular.module('dynform', [
   '$http',
   '$templateCache',
   '$compile',
-  '$document',
   '$timeout',
-  'formSupportedElements',
   'dynaformElements',
-  function ($scope, $element, $attrs, $q, $parse, $http, $templateCache, $compile, $document, $timeout, formSupportedElements, dynaformElements) {
-    var attrs = $attrs, element = $element, newElement = null, foundOne = false, iterElem = element, model = null;
+  '$log',
+  function ($scope, $element, $attrs, $q, $parse, $http, $templateCache, $compile, $timeout, dynaformElements, $log) {
+    var attrs = $attrs, element = $element, newElement = null, model = null;
     function parseTemplate() {
+      $log.debug('Template found in attributes:', attrs.template);
       return $q.when($parse(attrs.template)($scope));
     }
     function loadTemplate() {
+      $log.debug('loading template...', attrs.templateUrl);
       return $http.get(attrs.templateUrl, { cache: $templateCache }).then(function (result) {
+        $log.debug('Template loaded:', result.data);
         return result.data;
       });
     }
-    //  Check that the required attributes are in place
-    if (angular.isDefined(attrs.ngModel) && (angular.isDefined(attrs.template) || angular.isDefined(attrs.templateUrl)) && !element.hasClass('dynamic-form')) {
+    function hasRequiredAttributes(attrs) {
+      var hasModel = angular.isDefined(attrs.ngModel), hasTemplateOrTemplateUrl = angular.isDefined(attrs.template) || angular.isDefined(attrs.templateUrl), doesNotHaveDynamicFormClass = !element.hasClass('dynamic-form');
+      if (!hasModel) {
+        $log.error('Dynamic form does not have ng-model defined. Attributes:', attrs);
+      }
+      if (!hasTemplateOrTemplateUrl) {
+        $log.error('Dynamic form does not template or templateUrl defined. Attributes:', attrs);
+      }
+      if (!doesNotHaveDynamicFormClass) {
+        $log.error('Dynamic form already has dynamic-form css class. Attributes:', attrs);
+      }
+      return hasModel && hasTemplateOrTemplateUrl && doesNotHaveDynamicFormClass;
+    }
+    if (hasRequiredAttributes(attrs)) {
       //  Grab the template. either from the template attribute, or from the URL in templateUrl
       var getTemplate = attrs.template ? parseTemplate : loadTemplate;
       model = $parse(attrs.ngModel)($scope);
       getTemplate().then(function (template) {
         newElement = dynaformElements.parseTemplate(template, element, model, attrs);
-        //  Psuedo-transclusion
-        angular.forEach(attrs.$attr, function (attName, attIndex) {
-          newElement.attr(attName, attrs[attIndex]);
-        });
-        newElement.attr('model', attrs.ngModel);
-        newElement.removeAttr('ng-model');
-        angular.forEach(element[0].classList, function (clsName) {
-          newElement[0].classList.add(clsName);
-        });
-        newElement.addClass('dynamic-form');
-        newElement.append(element.contents());
-        //  onReset logic
-        newElement.data('$_cleanModel', angular.copy(model));
-        newElement.bind('reset', function () {
-          $timeout(function () {
-            $scope.$broadcast('reset', arguments);
-          }, 0);
-        });
-        $scope.$on('reset', function () {
-          $scope.$apply(function () {
-            $scope[attrs.ngModel] = {};
+        newElement = dynaformElements.prepareNewElement(newElement, element, model);
+        function configureReset(newElement, attrs) {
+          newElement.bind('reset', function () {
+            $timeout(function () {
+              $scope.$broadcast('reset', arguments);
+            }, 0);
           });
-          $scope.$apply(function () {
-            $scope[attrs.ngModel] = angular.copy(newElement.data('$_cleanModel'));
+          function resetModel(newElement, modelAttribute) {
+            $scope.$apply(function () {
+              $scope[modelAttribute] = {};
+            });
+            $scope.$apply(function () {
+              $scope[modelAttribute] = angular.copy(newElement.data('$_cleanModel'));
+            });
+          }
+          $scope.$on('reset', function () {
+            resetModel(newElement, attrs.ngModel);
           });
-        });
-        //  Compile and update DOM
-        $compile(newElement)($scope);
-        element.replaceWith(newElement);
+        }
+        function compileAndReplaceElement(element, newElement) {
+          $compile(newElement)($scope);
+          element.replaceWith(newElement);
+        }
+        configureReset(newElement, attrs);
+        compileAndReplaceElement(element, newElement);
       });
     }
   }
@@ -87,14 +97,18 @@ angular.module('dynform', [
     restrict: 'E',
     controller: 'DynamicFormCtrl'
   };
-});  /*  End of dynamic-forms.js */
+});
+;  /*  End of dynamic-forms.js */
 angular.module('dynaform.config', []).service('formSupportedElements', function FormSupportedElements() {
   var formSupportedElements = this;
   this.getType = function (type) {
     return formSupportedElements.elements[type];
   };
+  this.getRootElementMarkup = function getRootElementMarkup(elementTagText) {
+    return '<' + elementTagText + '></' + elementTagText + '>';
+  };
   this.getElementForType = function (type) {
-    var supportedField = formSupportedElements.getType(type), newElement = angular.element('<' + supportedField.element + '></' + supportedField.element + '>');
+    var supportedField = formSupportedElements.getType(type), newElement = angular.element(formSupportedElements.getRootElementMarkup(supportedField.element));
     if (angular.isDefined(supportedField.type)) {
       newElement.attr('type', supportedField.type);
     }
@@ -363,7 +377,8 @@ angular.module('dynaform.elements', [
   'parseTextElement',
   'formSupportedElements',
   '$document',
-  function DynaformElements(parseTextElement, formSupportedElements, $document) {
+  '$log',
+  function DynaformElements(parseTextElement, formSupportedElements, $document, $log) {
     var dynaformElements = this;
     dynaformElements.parseTemplate = function (template, element, model, attrs) {
       var newElement, iterElem = element, foundOne = false;
@@ -412,11 +427,33 @@ angular.module('dynaform.elements', [
       }
       return newElement;
     };
+    dynaformElements.prepareNewElement = function (newElement, element, model) {
+      function setNewElementAttributes(newElement, attrs) {
+        angular.forEach(attrs.$attr, function (attName, attIndex) {
+          newElement.attr(attName, attrs[attIndex]);
+        });
+        newElement.attr('model', attrs.ngModel);
+        newElement.removeAttr('ng-model');
+      }
+      function transferClassList(element, newElement) {
+        angular.forEach(element.classList, function (clsName) {
+          newElement.classList.add(clsName);
+        });
+      }
+      function finalizeNewElement(newElement, element, model) {
+        newElement.addClass('dynamic-form');
+        newElement.append(element.contents());
+        newElement.data('$_cleanModel', angular.copy(model));
+      }
+      setNewElementAttributes(newElement, attrs);
+      transferClassList(element[0], newElement[0]);
+      finalizeNewElement(newElement, element, model);
+      return newElement;
+    };
     dynaformElements.parseField = function (field, model, attrs) {
-      var supported = formSupportedElements.elements, newChild = null, optGroups = {}, cbAtt = '', newElement = formSupportedElements.getElementForType(field.type);
-      dynaformElements.parseEditableElements(field, newElement, attrs);
-      parseTextElement(field, newElement);
-      //  Special cases
+      var newChild = null, optGroups = {}, cbAtt = '', newElement = formSupportedElements.getElementForType(field.type);
+      newElement = dynaformElements.parseEditableElements(field, newElement, attrs);
+      newElement = parseTextElement(field, newElement);
       if (field.type === 'number' || field.type === 'range') {
         if (angular.isDefined(field.minValue)) {
           newElement.attr('min', field.minValue);
@@ -636,6 +673,7 @@ angular.module('dynaform.elements', [
           newElement.prepend(document.createTextNode(field.label + ' '));
         }
       }
+      return newElement;
     };
     dynaformElements.parseEditableElements = function (field, newElement, attrs) {
       var type = field.type, model = field.model, required = field.required, readonly = field.readonly, val = field.val;
