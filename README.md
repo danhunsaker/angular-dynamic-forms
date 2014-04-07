@@ -2,6 +2,8 @@ angular-dynamic-forms
 =====================
 Build Forms in AngularJS From Nothing But JSON
 
+Uses the MIT License.  See `LICENSE` file for details.
+
 Installation
 ------------
 1. Clone the project from either [GitHub][] or [BitBucket][] - whichever you prefer.
@@ -427,6 +429,9 @@ Acknowledgements
 * [Frank Linehan][] for leading me in [the right direction][directive].
 * [K. Scott Allen][] for the [file input directive][filedirective] and the [FileReader
     service][fileservice] adapted for use here.
+* [Joel Hooks][] for pointing out that the LGPL is too strong for this kind of project,
+	and that a monolithic piece of code like version 0.0.0 makes very little sense in
+	an MVVM environment.
 
 Issues And Assistance
 ---------------------
@@ -474,7 +479,8 @@ you prefer), and submit a pull request with your contribution(s)!
 [`ng-switch`]: http://docs.angularjs.org/api/ng.directive:ngSwitch
 [`ng-true-value`]: http://docs.angularjs.org/api/ng.directive:input.checkbox
 
-[AngularJS]: http://angularjs.org/
-[Frank Linehan]: http://frank-code.com/
+[AngularJS]: http://angularjs.org
+[Frank Linehan]: http://frank-code.com
 [K. Scott Allen]: http://odetocode.com/about/scott-allen
-[OdeToCode]: http://odetocode.com/
+[OdeToCode]: http://odetocode.com
+[Joel Hooks]: http://joelhooks.com
