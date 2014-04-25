@@ -1,18 +1,22 @@
-{
-  "bogus": {
+[
+  {
     "type": "bogus",
+    "model": "bogus",
     "label": "bogus"
   },
-  "button": {
+  {
     "type": "button",
+    "model": "button",
     "label": "button"
   },
-  "checkbox": {
+  {
     "type": "checkbox",
+    "model": "checkbox",
     "label": "checkbox"
   },
-  "checklist": {
+  {
     "type": "checklist",
+    "model": "checklist",
     "label": "checklist",
     "options": {
       "first": {
@@ -25,70 +29,84 @@
       }
     }
   },
-  "color": {
+  {
     "type": "color",
+    "model": "color",
     "label": "color"
   },
-  "date": {
+  {
     "type": "date",
+    "model": "date",
     "label": "date",
     "placeholder": "date"
   },
-  "datetime": {
+  {
     "type": "datetime",
+    "model": "datetime",
     "label": "datetime",
     "placeholder": "datetime"
   },
-  "datetime-local": {
+  {
     "type": "datetime-local",
+    "model": "datetime-local",
     "label": "datetime-local",
     "placeholder": "datetime-local"
   },
-  "email": {
+  {
     "type": "email",
+    "model": "email",
     "label": "email",
     "placeholder": "email"
   },
-  "file": {
+  {
     "type": "file",
+    "model": "file",
     "label": "file",
     "multiple": true
   },
-  "fieldset": {
+  {
     "type": "fieldset",
+    "model": "fieldset",
     "label": "fieldset",
-    "fields": {
-      "hidden": {
+    "fields": [
+      {
         "type": "hidden",
+        "model": "hidden",
         "label": "hidden",
         "val": "hidden"
       },
-      "image": {
+      {
         "type": "image",
+        "model": "image",
         "label": "image",
         "source": "http://angularjs.org/img/AngularJS-large.png"
       },
-      "legend": {
+      {
         "type": "legend",
+        "model": "legend",
         "label": "legend"
       },
-      "month": {
+      {
         "type": "month",
+        "model": "month",
         "label": "month",
         "placeholder": "month"
       },
-      "number": {
+      {
         "type": "number",
+        "model": "number",
         "label": "number",
         "placeholder": "number"
       },
-      "password": {
+      {
         "type": "password",
+        "model": "password",
         "label": "password",
         "placeholder": "password"
       },
-      "radio": {
+      {
         "type": "radio",
+        "model": "radio",
         "label": "radio",
         "values": {
           "first": "first option",
@@ -98,27 +116,30 @@
           "fifth": "fifth option"
         }
       },
-      "range": {
+      {
         "type": "range",
-        "label": "range",
         "model": "number",
+        "label": "range",
         "val": 42,
         "minValue": -42,
         "maxValue": 84
       }
-    }
+    ]
   },
-  "reset": {
+  {
     "type": "reset",
+    "model": "reset",
     "label": "reset"
   },
-  "search": {
+  {
     "type": "search",
+    "model": "search",
     "label": "search",
     "placeholder": "search"
   },
-  "select": {
+  {
     "type": "select",
+    "model": "select",
     "label": "select",
     "empty": "nothing selected",
     "options": {
@@ -160,40 +181,47 @@
       }
     }
   },
-  "submit": {
+  {
     "type": "submit",
+    "model": "submit",
     "label": "submit"
   },
-  "tel": {
+  {
     "type": "tel",
+    "model": "tel",
     "label": "tel",
     "placeholder": "tel"
   },
-  "text": {
+  {
     "type": "text",
+    "model": "text",
     "label": "text",
     "placeholder": "text"
   },
-  "textarea": {
+  {
     "type": "textarea",
+    "model": "textarea",
     "label": "textarea",
     "placeholder": "textarea",
     "splitBy": "\n",
     "val": ["This array should be","separated by new lines"]
   },
-  "time": {
+  {
     "type": "time",
+    "model": "time",
     "label": "time",
     "placeholder": "time"
   },
-  "url": {
+  {
     "type": "url",
+    "model": "url",
     "label": "url",
     "placeholder": "url"
   },
-  "week": {
+  {
     "type": "week",
+    "model": "week",
     "label": "week",
     "placeholder": "week"
   }
-}
+]
