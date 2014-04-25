@@ -25,15 +25,31 @@
 			margin: 1ex 0;
 		}
 		
-        form,
-        ng-form {
-            border: 1px solid blue;
-            border-radius: 4px;
-            display: block;
-        }
-        
+		form,
+		ng-form {
+			border: 1px solid blue;
+			border-radius: 4px;
+			display: block;
+		}
+		
+		fieldset {
+			border: 1px solid blue;
+			border-radius: 4px;
+			display: block;
+			padding: .35em .625em .75em;
+			margin: 0 2px;
+		}
+		
 		legend {
 			font-weight: bold;
+		}
+		
+		fieldset > legend:first-of-type {
+			border: none;
+			margin-bottom: auto;
+			width: inherit;
+			padding: inherit;
+			color: blue;
 		}
 		
 		label,

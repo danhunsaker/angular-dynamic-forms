@@ -111,6 +111,7 @@ what][formsupport])
 * [datetime](#datetime)
 * [datetime-local](#datetime-local)
 * [email](#email)
+* [fieldset](#fieldset)
 * [file](#file)
 * [hidden](#hidden)
 * [image](#image)
@@ -214,6 +215,13 @@ what][formsupport])
 * __Other Notes:__
     * On devices that have on-screen keyboards, the browser may modify the keyboard layout to make
         entering email addresses in these controls easier.
+
+#### fieldset ####
+* __Renders:__ `<fieldset></fieldset>`
+* __Additional Options:__
+    * `fields`: the template for the fields which should appear in the `fieldset`
+* __Other Notes:__
+    * The value of `label` is used to create a `<legend>` tag as the first child of the `fieldset`
 
 #### file ####
 * __Renders:__ `<input type="file">`

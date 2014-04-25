@@ -38,8 +38,9 @@ angular.module('dynform', [])
         'file': {element: 'input', type: 'file', editable: true, textBased: false},
         'range': {element: 'input', type: 'range', editable: true, textBased: false},
         'select': {element: 'select', editable: true, textBased: false},
-        //  Pseudo-non-editables (containered)
+        //  Pseudo-non-editables (containers)
         'checklist': {element: 'div', editable: false, textBased: false},
+        'fieldset': {element: 'fieldset', editable: false, textBased: false},
         'radio': {element: 'div', editable: false, textBased: false},
         //  Non-editables (mostly buttons)
         'button': {element: 'button', type: 'button', editable: false, textBased: false},
@@ -71,7 +72,7 @@ angular.module('dynform', [])
               return result.data;
             })
           ).then(function (template) {
-            angular.forEach(template, function (field, id) {
+            var buildFields = function (field, id) {
               if (!angular.isDefined(supported[field.type]) || supported[field.type] === false) {
                 //  Unsupported.  Create SPAN with field.label as contents
                 newElement = angular.element('<span></span>');
@@ -80,7 +81,7 @@ angular.module('dynform', [])
                   if (["label", "type"].indexOf(attr) > -1) {return;}
                   newElement.attr(attr, val);
                 })
-                element.append(newElement);
+                this.append(newElement);
                 newElement = null;
               }
               else {
@@ -234,6 +235,13 @@ angular.module('dynform', [])
                     newElement.attr('multiple', field.multiple);
                   }
                 }
+                else if (field.type === 'fieldset') {
+                  if (angular.isDefined(field.fields)) {
+                    var workingElement = newElement;
+                    angular.forEach(field.fields, buildFields, newElement);
+                    newElement = workingElement;
+                  }
+                }
                 
                 //  Common attributes; radio already applied these...
                 if (field.type !== "radio") {
@@ -243,7 +251,7 @@ angular.module('dynform', [])
                     if (angular.isDefined(field.disabled)) {newElement.attr('ng-disabled', field.disabled);}
                     if (angular.isDefined(field.callback)) {
                       //  Some input types need listeners on click...
-                      if (["button", "image", "legend", "reset", "submit"].indexOf(field.type) > -1) {
+                      if (["button", "fieldset", "image", "legend", "reset", "submit"].indexOf(field.type) > -1) {
                         cbAtt = 'ng-click';
                       }
                       //  ...the rest on change.
@@ -261,6 +269,10 @@ angular.module('dynform', [])
                   if (["image", "hidden"].indexOf(field.type) > -1) {
                     angular.noop();
                   }
+                  //  Fieldset elements put their labels in legend child elements.
+                  else if (["fieldset"].indexOf(field.type) > -1) {
+                    newElement.prepend(angular.element('<legend>' + field.label + '</legend>'));
+                  }
                   //  Button elements get their labels from their contents.
                   else if (["button", "legend", "reset", "submit"].indexOf(field.type) > -1) {
                     newElement.html(field.label);
@@ -271,10 +283,12 @@ angular.module('dynform', [])
                     newElement.prepend(document.createTextNode(field.label + ' '));
                   }
                 }
-                element.append(newElement);
+                this.append(newElement);
                 newElement = null;
               }
-            });
+            };
+            
+            angular.forEach(template, buildFields, element);
             
             //  Determine what tag name to use (ng-form if nested; form if outermost)
             while (!angular.equals(iterElem.parent(), $document) && !angular.equals(iterElem.parent(), angular.element())) {

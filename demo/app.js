@@ -1,77 +1,83 @@
 angular.module('app', ['dynform'])
   .controller('AppCtrl', ['$scope', function ($scope) {
     $scope.stdFormTemplate = {
-      "text": {
-        "type": "text",
-        "label": "text",
-        "placeholder": "text"
-      },
-      "date": {
-        "type": "date",
-        "label": "date",
-        "placeholder": "date"
-      },
-      "datetime": {
-        "type": "datetime",
-        "label": "datetime",
-        "placeholder": "datetime"
-      },
-      "datetime-local": {
-        "type": "datetime-local",
-        "label": "datetime-local",
-        "placeholder": "datetime-local"
-      },
-      "email": {
-        "type": "email",
-        "label": "email",
-        "placeholder": "email"
-      },
-      "month": {
-        "type": "month",
-        "label": "month",
-        "placeholder": "month"
-      },
-      "number": {
-        "type": "number",
-        "label": "number",
-        "placeholder": "number"
-      },
-      "password": {
-        "type": "password",
-        "label": "password",
-        "placeholder": "password"
-      },
-      "search": {
-        "type": "search",
-        "label": "search",
-        "placeholder": "search"
-      },
-      "tel": {
-        "type": "tel",
-        "label": "tel",
-        "placeholder": "tel"
-      },
-      "textarea": {
-        "type": "textarea",
-        "label": "textarea",
-        "placeholder": "textarea",
-        "splitBy": "\n",
-        "val": ["This array should be","separated by new lines"]
-      },
-      "time": {
-        "type": "time",
-        "label": "time",
-        "placeholder": "time"
-      },
-      "url": {
-        "type": "url",
-        "label": "url",
-        "placeholder": "url"
-      },
-      "week": {
-        "type": "week",
-        "label": "week",
-        "placeholder": "week"
+      "fieldset": {
+        "type": "fieldset",
+        "label": "fieldset",
+        "fields": {
+          "text": {
+            "type": "text",
+            "label": "text",
+            "placeholder": "text"
+          },
+          "date": {
+            "type": "date",
+            "label": "date",
+            "placeholder": "date"
+          },
+          "datetime": {
+            "type": "datetime",
+            "label": "datetime",
+            "placeholder": "datetime"
+          },
+          "datetime-local": {
+            "type": "datetime-local",
+            "label": "datetime-local",
+            "placeholder": "datetime-local"
+          },
+          "email": {
+            "type": "email",
+            "label": "email",
+            "placeholder": "email"
+          },
+          "month": {
+            "type": "month",
+            "label": "month",
+            "placeholder": "month"
+          },
+          "number": {
+            "type": "number",
+            "label": "number",
+            "placeholder": "number"
+          },
+          "password": {
+            "type": "password",
+            "label": "password",
+            "placeholder": "password"
+          },
+          "search": {
+            "type": "search",
+            "label": "search",
+            "placeholder": "search"
+          },
+          "tel": {
+            "type": "tel",
+            "label": "tel",
+            "placeholder": "tel"
+          },
+          "textarea": {
+            "type": "textarea",
+            "label": "textarea",
+            "placeholder": "textarea",
+            "splitBy": "\n",
+            "val": ["This array should be","separated by new lines"]
+          },
+          "time": {
+            "type": "time",
+            "label": "time",
+            "placeholder": "time"
+          },
+          "url": {
+            "type": "url",
+            "label": "url",
+            "placeholder": "url"
+          },
+          "week": {
+            "type": "week",
+            "label": "week",
+            "placeholder": "week"
+          }
+        }
       },
       "checkbox": {
         "type": "checkbox",

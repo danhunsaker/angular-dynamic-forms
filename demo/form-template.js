@@ -54,53 +54,59 @@
     "label": "file",
     "multiple": true
   },
-  "hidden": {
-    "type": "hidden",
-    "label": "hidden",
-    "val": "hidden"
-  },
-  "image": {
-    "type": "image",
-    "label": "image",
-    "source": "http://angularjs.org/img/AngularJS-large.png"
-  },
-  "legend": {
-    "type": "legend",
-    "label": "legend"
-  },
-  "month": {
-    "type": "month",
-    "label": "month",
-    "placeholder": "month"
-  },
-  "number": {
-    "type": "number",
-    "label": "number",
-    "placeholder": "number"
-  },
-  "password": {
-    "type": "password",
-    "label": "password",
-    "placeholder": "password"
-  },
-  "radio": {
-    "type": "radio",
-    "label": "radio",
-    "values": {
-      "first": "first option",
-      "second": "second option",
-      "third": "third option",
-      "fourth": "fourth option",
-      "fifth": "fifth option"
+  "fieldset": {
+    "type": "fieldset",
+    "label": "fieldset",
+    "fields": {
+      "hidden": {
+        "type": "hidden",
+        "label": "hidden",
+        "val": "hidden"
+      },
+      "image": {
+        "type": "image",
+        "label": "image",
+        "source": "http://angularjs.org/img/AngularJS-large.png"
+      },
+      "legend": {
+        "type": "legend",
+        "label": "legend"
+      },
+      "month": {
+        "type": "month",
+        "label": "month",
+        "placeholder": "month"
+      },
+      "number": {
+        "type": "number",
+        "label": "number",
+        "placeholder": "number"
+      },
+      "password": {
+        "type": "password",
+        "label": "password",
+        "placeholder": "password"
+      },
+      "radio": {
+        "type": "radio",
+        "label": "radio",
+        "values": {
+          "first": "first option",
+          "second": "second option",
+          "third": "third option",
+          "fourth": "fourth option",
+          "fifth": "fifth option"
+        }
+      },
+      "range": {
+        "type": "range",
+        "label": "range",
+        "model": "number",
+        "val": 42,
+        "minValue": -42,
+        "maxValue": 84
+      }
     }
-  },
-  "range": {
-    "type": "range",
-    "label": "range",
-    "model": "number",
-    "val": 42,
-    "minValue": -42,
-    "maxValue": 84
   },
   "reset": {
     "type": "reset",
