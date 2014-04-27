@@ -80,7 +80,7 @@ angular.module('dynform', [])
                 angular.forEach(field, function (val, attr) {
                   if (["label", "type"].indexOf(attr) > -1) {return;}
                   newElement.attr(attr, val);
-                })
+                });
                 this.append(newElement);
                 newElement = null;
               }
@@ -283,6 +283,15 @@ angular.module('dynform', [])
                     newElement.prepend(document.createTextNode(field.label + ' '));
                   }
                 }
+                
+                // Arbitrary attributes
+                if (angular.isDefined(field.attributes)) {
+                  angular.forEach(field.attributes, function (val, attr) {
+                    newElement.attr(attr, val);
+                  });
+                }
+                
+                // Add the element to the page
                 this.append(newElement);
                 newElement = null;
               }

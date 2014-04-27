@@ -133,6 +133,8 @@ what][formsupport])
 * [week](#week)
 
 #### Common Options ####
+* `attributes`: key-value pairs for arbitrary attributes not otherwise supported here; it is strongly
+    recommended that you use this option *only* if the attribute you need isn't already supported
 * `class`: see [`ng-class`][]
 * `callback`: see [`ng-change`][] (or [`ng-click`][] for button-like types)
 * `disabled`: see [`ng-disabled`][]
