@@ -186,21 +186,21 @@ angular.module('dynform', [])
                 }
                 else if (field.type === 'select') {
                   if (angular.isDefined(field.multiple) && field.multiple !== false) {newElement.attr('multiple', 'multiple');}
-                  if (angular.isDefined(field.empty) && field.empty !== false) {newElement.append(angular.element('<option value=""></option>').html(field.empty));}
+                  if (angular.isDefined(field.empty) && field.empty !== false) {newElement.append(angular.element($document[0].createElement('option')).attr('value', '').html(field.empty));}
                   
                   if (angular.isDefined(field.autoOptions)) {
                     newElement.attr('ng-options', field.autoOptions);
                   }
                   else if (angular.isDefined(field.options)) {
                     angular.forEach(field.options, function (option, childId) {
-                      newChild = angular.element('<option></option>');
+                      newChild = angular.element($document[0].createElement('option'));
                       newChild.attr('value', childId);
                       if (angular.isDefined(option.disabled)) {newChild.attr('ng-disabled', option.disabled);}
                       if (angular.isDefined(option.slaveTo)) {newChild.attr('ng-selected', option.slaveTo);}
                       if (angular.isDefined(option.label)) {newChild.html(option.label);}
                       if (angular.isDefined(option.group)) {
                         if (!angular.isDefined(optGroups[option.group])) {
-                          optGroups[option.group] = angular.element('<optgroup></optgroup>');
+                          optGroups[option.group] = angular.element($document[0].createElement('optgroup'));
                           optGroups[option.group].attr('label', option.group);
                         }
                         optGroups[option.group].append(newChild);
@@ -271,7 +271,7 @@ angular.module('dynform', [])
                   }
                   //  Fieldset elements put their labels in legend child elements.
                   else if (["fieldset"].indexOf(field.type) > -1) {
-                    newElement.prepend(angular.element('<legend>' + field.label + '</legend>'));
+                    newElement.prepend(angular.element($document[0].createElement('legend')).html(field.label));
                   }
                   //  Button elements get their labels from their contents.
                   else if (["button", "legend", "reset", "submit"].indexOf(field.type) > -1) {

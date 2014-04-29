@@ -19,6 +19,38 @@ As with any other [AngularJS][] module:
     <script src="assets/js/dynamic-forms.js"></script>
 ```
 
+* _**INTERNET EXPLORER**_: This project (as with most of Angular itself) WILL NOT work
+    properly with IE 6 or 7.  Some of the functionality can be coerced into working, but much of it
+	will simply be broken.  `radio` fields, for example, will have every member selected.  This may
+	be fixed in a future version, but as it's 2014, IE 6 and 7 are very low priorities, especially
+	with XP reaching end of life.  IE 8 will work, with a bit of extra setup (you can try this for 
+    IE 6 and 7 as well, but again, they probably won't work):
+
+```html
+    <!--[if lte IE 8]>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/json3/3.3.1/json3.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/2.3.0/es5-shim.min.js"></script>
+        <script>
+            document.createElement('ng-include');
+            document.createElement('ng-pluralize');
+            document.createElement('ng-view');
+            document.createElement('ng-form');
+            document.createElement('dynamic-form');
+            
+            // Optionally these for CSS
+            document.createElement('ng:include');
+            document.createElement('ng:pluralize');
+            document.createElement('ng:view');
+            document.createElement('ng:form');
+            
+            // IE doesn't always run the bootstrap on its own...
+            $(document).ready(function() {
+              angular.bootstrap(document);
+            });
+        </script>
+    <![endif]-->
+```
+
 * list `dynform` as a dependency of your project.
 
 ```javascript
