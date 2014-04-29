@@ -90,7 +90,7 @@ angular.module('dynform', [])
                   field.model = id;
                 }
                 
-                newElement = angular.element('<' + supported[field.type].element + '></' + supported[field.type].element + '>');
+                newElement = angular.element($document[0].createElement(supported[field.type].element));
                 if (angular.isDefined(supported[field.type].type)) {
                   newElement.attr('type', supported[field.type].type);
                 }
@@ -308,7 +308,7 @@ angular.module('dynform', [])
               iterElem = iterElem.parent();
             }
             if (foundOne) {
-              newElement = angular.element("<ng-form></ng-form>");
+              newElement = angular.element($document[0].createElement('ng-form'));
             }
             else {
               newElement = angular.element("<form></form>");
