@@ -1,0 +1,9 @@
+{
+  "name": "angular-dynamic-forms",
+  "description": "Build forms in AngularJS from nothing but JSON.",
+  "version": "0.0.2",
+  "main": "./dynamic-forms.js",
+  "dependencies": {
+    "angular": ">=1.0.8"
+  }
+}
