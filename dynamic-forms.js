@@ -120,9 +120,7 @@ angular.module('dynform', [])
                 if (field.type === 'number' || field.type === 'range') {
                   if (angular.isDefined(field.minValue)) {newElement.attr('min', field.minValue);}
                   if (angular.isDefined(field.maxValue)) {newElement.attr('max', field.maxValue);}
-                  if (field.type === 'range') {
-                    if (angular.isDefined(field.step)) {newElement.attr('step', field.step);}
-                  }
+                  if (angular.isDefined(field.step)) {newElement.attr('step', field.step);}
                 }
                 else if (['text', 'textarea'].indexOf(field.type) > -1) {
                   if (angular.isDefined(field.splitBy)) {newElement.attr('ng-list', field.splitBy);}
