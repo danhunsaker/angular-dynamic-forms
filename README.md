@@ -309,6 +309,7 @@ what][formsupport])
 * __Additional Options:__
     * `maxValue`: the largest allowed value for this control
     * `minValue`: the smallest allowed value for this control
+    * `step`: the amount by which the control can increase or decrease in value
     * Also see [text](#text) below
 * __Other Notes:__
     * May not be [supported][numbersupport] in all browsers
