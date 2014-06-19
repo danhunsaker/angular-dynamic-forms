@@ -99,6 +99,7 @@ angular.module('dynform', [])
                 if (angular.isDefined(supported[field.type].editable) && supported[field.type].editable) {
                   newElement.attr('name', field.model);
                   newElement.attr('ng-model', attrs.ngModel + "['" + field.model + "']");
+                  newElement.attr('data-ref', attrs.ref + '.' + field.model);
                     
                   if (angular.isDefined(field.readonly)) {newElement.attr('ng-readonly', field.readonly);}
                   if (angular.isDefined(field.required)) {newElement.attr('ng-required', field.required);}
@@ -298,7 +299,7 @@ angular.module('dynform', [])
             angular.forEach(template, buildFields, element);
             
             //  Determine what tag name to use (ng-form if nested; form if outermost)
-            while (!angular.equals(iterElem.parent(), $document) && !angular.equals(iterElem.parent(), angular.element())) {
+            while (!angular.equals(iterElem.parent(), $document) && iterElem.parent().length) {
               if (['form','ngForm','dynamicForm'].indexOf(attrs.$normalize(angular.lowercase(iterElem.parent()[0].nodeName))) > -1) {
                 foundOne = true;
                 break;
