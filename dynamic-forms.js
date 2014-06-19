@@ -72,6 +72,14 @@ angular.module('dynform', [])
               return result.data;
             })
           ).then(function (template) {
+            var setProperty = function (obj, props, value, lastProp) {
+              props = props.split('.');
+              lastProp = lastProp || props.pop();
+              for (var i = 0; i < props.length; i++) {
+                obj = obj[props[i]] = obj[props[i]] || {};
+              }
+              obj[lastProp] = value;
+            }
             var buildFields = function (field, id) {
               if (!angular.isDefined(supported[field.type]) || supported[field.type] === false) {
                 //  Unsupported.  Create SPAN with field.label as contents
@@ -103,7 +111,7 @@ angular.module('dynform', [])
                   if (angular.isDefined(field.readonly)) {newElement.attr('ng-readonly', field.readonly);}
                   if (angular.isDefined(field.required)) {newElement.attr('ng-required', field.required);}
                   if (angular.isDefined(field.val)) {
-                    model[field.model] = angular.copy(field.val);
+                    setProperty(model, field.model, angular.copy(field.val));
                     newElement.attr('value', field.val);
                   }
                 }
@@ -131,9 +139,13 @@ angular.module('dynform', [])
                   if (angular.isDefined(field.slaveTo)) {newElement.attr('ng-checked', field.slaveTo);}
                 }
                 else if (field.type === 'checklist') {
-                  if (angular.isDefined(field.val)) {model[field.model] = angular.copy(field.val);}
+                  if (angular.isDefined(field.val)) {
+                    setProperty(model, field.model, angular.copy(field.val));
+                  }
                   if (angular.isDefined(field.options)) {
-                    if ( ! (angular.isDefined(model[field.model]) && angular.isObject(model[field.model]))) {model[field.model] = {};}
+                    if (! (angular.isDefined(model[field.model]) && angular.isObject(model[field.model]))) {
+                      setProperty(model, field.model, {});
+                    }
                     angular.forEach(field.options, function (option, childId) {
                       newChild = angular.element('<input type="checkbox" />');
                       newChild.attr('name', field.model + '.' + childId);
@@ -147,8 +159,8 @@ angular.module('dynform', [])
                       if (angular.isDefined(option.isOff)) {newChild.attr('ng-false-value', option.isOff);}
                       if (angular.isDefined(option.slaveTo)) {newChild.attr('ng-checked', option.slaveTo);}
                       if (angular.isDefined(option.val)) {
-                        model[field.model][childId] = angular.copy(option.val);
-                        newChlid.attr('value', field.val);
+                        setProperty(model, field.model, angular.copy(option.val), childId);
+                        newChlid.attr('value', option.val);
                       }
                       
                       if (angular.isDefined(option.label)) {
@@ -160,7 +172,9 @@ angular.module('dynform', [])
                   }
                 }
                 else if (field.type === 'radio') {
-                  if (angular.isDefined(field.val)) {model[field.model] = angular.copy(field.val);}
+                  if (angular.isDefined(field.val)) {
+                    setProperty(model, field.model, angular.copy(field.val));
+                  }
                   if (angular.isDefined(field.values)) {
                     angular.forEach(field.values, function (label, val) {
                       newChild = angular.element('<input type="radio" />');
@@ -224,7 +238,7 @@ angular.module('dynform', [])
                   newElement.attr('name', field.model);
                   newElement.attr('ng-model', attrs.ngModel + "." + field.model);
                   if (angular.isDefined(field.val)) {
-                    model[field.model] = angular.copy(field.val);
+                    setProperty(model, field.model, angular.copy(field.val));
                     newElement.attr('value', field.val);
                   }
                 }
