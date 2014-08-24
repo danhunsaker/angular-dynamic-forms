@@ -1,0 +1,22 @@
+{
+  "name": "angular-dynamic-forms",
+  "version": "0.0.2",
+  "homepage": "https://github.com/danhunsaker/angular-dynamic-forms",
+  "authors": [
+    "Daniel Hunsaker <danhunsaker@gmail.com>"
+  ],
+  "description": "Build Forms in AngularJS From Nothing But JSON",
+  "main": "dynamic-forms.js",
+  "keywords": [
+    "angular",
+    "form"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
