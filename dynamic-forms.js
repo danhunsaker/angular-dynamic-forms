@@ -80,8 +80,9 @@ angular.module('dynform', [])
               }
               obj[lastProp] = value;
             }
-            var bracket = function (model) {
-              return "['" + model.split('.').join("']['") + "']";
+            var bracket = function (model, base) {
+              props = model.split('.');
+              return (base || props.shift()) + (props.length ? "['" + props.join("']['") + "']" : '');
             }
             var buildFields = function (field, id) {
               if (!angular.isDefined(supported[field.type]) || supported[field.type] === false) {
@@ -108,8 +109,8 @@ angular.module('dynform', [])
                 
                 //  Editable fields (those that can feed models)
                 if (angular.isDefined(supported[field.type].editable) && supported[field.type].editable) {
-                  newElement.attr('name', field.model);
-                  newElement.attr('ng-model', attrs.ngModel + bracket(field.model));
+                  newElement.attr('name', bracket(field.model));
+                  newElement.attr('ng-model', bracket(field.model, attrs.ngModel));
                     
                   if (angular.isDefined(field.readonly)) {newElement.attr('ng-readonly', field.readonly);}
                   if (angular.isDefined(field.required)) {newElement.attr('ng-required', field.required);}
@@ -151,8 +152,8 @@ angular.module('dynform', [])
                     }
                     angular.forEach(field.options, function (option, childId) {
                       newChild = angular.element('<input type="checkbox" />');
-                      newChild.attr('name', field.model + '.' + childId);
-                      newChild.attr('ng-model', attrs.ngModel + bracket(field.model + "." + childId));
+                      newChild.attr('name', bracket(field.model + '.' + childId));
+                      newChild.attr('ng-model', bracket(field.model + "." + childId, attrs.ngModel));
                       if (angular.isDefined(option['class'])) {newChild.attr('ng-class', option['class']);}
                       if (angular.isDefined(field.disabled)) {newChild.attr('ng-disabled', field.disabled);}
                       if (angular.isDefined(field.readonly)) {newChild.attr('ng-readonly', field.readonly);}
@@ -181,8 +182,8 @@ angular.module('dynform', [])
                   if (angular.isDefined(field.values)) {
                     angular.forEach(field.values, function (label, val) {
                       newChild = angular.element('<input type="radio" />');
-                      newChild.attr('name', field.model);
-                      newChild.attr('ng-model', attrs.ngModel + bracket(field.model));
+                      newChild.attr('name', bracket(field.model));
+                      newChild.attr('ng-model', bracket(field.model, attrs.ngModel));
                       if (angular.isDefined(field['class'])) {newChild.attr('ng-class', field['class']);}
                       if (angular.isDefined(field.disabled)) {newChild.attr('ng-disabled', field.disabled);}
                       if (angular.isDefined(field.callback)) {newChild.attr('ng-change', field.callback);}
@@ -238,8 +239,8 @@ angular.module('dynform', [])
                   if (angular.isDefined(field.source)) {newElement.attr('src', field.source);}
                 }
                 else if (field.type === 'hidden') {
-                  newElement.attr('name', field.model);
-                  newElement.attr('ng-model', attrs.ngModel + bracket(field.model));
+                  newElement.attr('name', bracket(field.model));
+                  newElement.attr('ng-model', bracket(field.model, attrs.ngModel));
                   if (angular.isDefined(field.val)) {
                     setProperty(model, field.model, angular.copy(field.val));
                     newElement.attr('value', field.val);
