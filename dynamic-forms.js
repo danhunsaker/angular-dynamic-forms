@@ -72,13 +72,14 @@ angular.module('dynform', [])
               return result.data;
             })
           ).then(function (template) {
-            var setProperty = function (obj, props, value, lastProp) {
+            var setProperty = function (obj, props, value, lastProp, buildParent) {
               props = props.split('.');
               lastProp = lastProp || props.pop();
               for (var i = 0; i < props.length; i++) {
                 obj = obj[props[i]] = obj[props[i]] || {};
               }
-              obj[lastProp] = value;
+              if (!buildParent)
+                obj[lastProp] = value;
             }
             var bracket = function (model, base) {
               props = model.split('.');
@@ -111,6 +112,8 @@ angular.module('dynform', [])
                 if (angular.isDefined(supported[field.type].editable) && supported[field.type].editable) {
                   newElement.attr('name', bracket(field.model));
                   newElement.attr('ng-model', bracket(field.model, attrs.ngModel));
+                  // Build parent in case of a nested model
+                  setProperty(model, field.model, {}, null, true);
                     
                   if (angular.isDefined(field.readonly)) {newElement.attr('ng-readonly', field.readonly);}
                   if (angular.isDefined(field.required)) {newElement.attr('ng-required', field.required);}
