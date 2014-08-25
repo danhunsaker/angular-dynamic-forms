@@ -82,6 +82,21 @@
         "source": "http://angularjs.org/img/AngularJS-large.png"
       },
       {
+        "type": "checklist",
+        "model": "nested.checklist",
+        "label": "nested.checklist",
+        "options": {
+          "first": {
+            "label": "first option"
+          },
+          "second": {
+            "label": "second option",
+            "isOn": "on",
+            "isOff": "off"
+          }
+        }
+      },
+      {
         "type": "legend",
         "model": "legend",
         "label": "legend"
