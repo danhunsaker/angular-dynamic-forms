@@ -76,6 +76,16 @@ angular.module('app', ['dynform'])
             "type": "week",
             "label": "week",
             "placeholder": "week"
+          },
+          "coordinates.lat": {
+            "type": "number",
+            "label": "coordinates.lat",
+            "placeholder": 36.5
+          },
+          "coordinates.lon": {
+            "type": "number",
+            "label": "coordinates.lon",
+            "placeholder": -0.15
           }
         }
       },

@@ -123,6 +123,11 @@
         "val": 42,
         "minValue": -42,
         "maxValue": 84
+      },
+      {
+        "type": "text",
+        "model": "deeply.nested.model.property",
+        "label": "deeply.nested.model.property"
       }
     ]
   },
@@ -223,5 +228,17 @@
     "model": "week",
     "label": "week",
     "placeholder": "week"
+  },
+  {
+    "type": "number",
+    "model": "coordinates.lat",
+    "label": "coordinates.lat",
+    "val": 36.5
+  },
+  {
+    "type": "number",
+    "model": "coordinates.lon",
+    "label": "coordinates.lon",
+    "val": -0.15
   }
 ]
