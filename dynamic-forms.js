@@ -80,12 +80,12 @@ angular.module('dynform', [])
               }
               if (!buildParent)
                 obj[lastProp] = value;
-            }
-            var bracket = function (model, base) {
+            },
+            bracket = function (model, base) {
               props = model.split('.');
               return (base || props.shift()) + (props.length ? "['" + props.join("']['") + "']" : '');
-            }
-            var buildFields = function (field, id) {
+            },
+            buildFields = function (field, id) {
               if (!angular.isDefined(supported[field.type]) || supported[field.type] === false) {
                 //  Unsupported.  Create SPAN with field.label as contents
                 newElement = angular.element('<span></span>');
