@@ -298,7 +298,7 @@ angular.module('dynform', [])
             angular.forEach(template, buildFields, element);
             
             //  Determine what tag name to use (ng-form if nested; form if outermost)
-            while (!angular.equals(iterElem.parent(), $document) && !angular.equals(iterElem.parent(), angular.element())) {
+            while (!angular.equals(iterElem.parent(), $document) && !angular.equals(iterElem[0], $document[0].documentElement)) {
               if (['form','ngForm','dynamicForm'].indexOf(attrs.$normalize(angular.lowercase(iterElem.parent()[0].nodeName))) > -1) {
                 foundOne = true;
                 break;
