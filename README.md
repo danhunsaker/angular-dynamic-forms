@@ -66,25 +66,29 @@ As with any other [AngularJS][] module:
     </dynamic-form>
 ```
 
-* populate your [template](#the-template) with a JSON object describing the form you want to create.
+* populate your [template](#the-template) with a JSON array describing the form you want to create.
 
 ```javascript
-    $scope.formTemplate = {
-        "first": {
+    $scope.formTemplate = [
+        {
             "type": "text",
             "label": "First Name"
+            "model": "first"
         },
-        "last": {
+        {
             "type": "text",
             "label": "Last Name"
+            "model": "last"
         },
-        "submit": {
+        {
             "type": "submit"
+            "model": "submit"
         },
-    };
+    ];
 ```
 
-And that's about it!
+And that's about it!  Check out the demo for a more robust example, or keep reading to learn about
+all of the things you can do with this module.
 
 The TL;DR Version
 -----------------
@@ -106,8 +110,8 @@ You may not want to rely on the directive to retrieve your form directly - perha
 some processing on the server response before passing it to the directive for building, or maybe
 you need to specify a more complex [`$http`][] request with advanced authentication.  Or perhaps you
 just want to proactively handle failure to retrieve the template.  Enter the `template` attribute.
-When the directive sees `template`, it ignores any `template-url` and instead uses the object
-identified by the `template` attribute.
+When the directive sees `template`, it ignores any `template-url` and instead uses the array
+identified by the `template` attribute.  (See [below](#the-template) for more details on this value.)
 
 Any other attributes you specify on the `dynamic-form` element are copied across to the `form` or
 [`ng-form`][] element that the directive builds to replace itself with.  Similarly, any pre-existing
@@ -125,15 +129,21 @@ course, need to provide your own `action` and `method` attributes for this to wo
 
 ### The Template ###
 Regardless of whether it arrives via `template` or `template-url`, the form template is a
-fairly-straightforward JavaScript object.  Its keys correspond (by default) to input control
-`name`s, which in turn (also by default) correspond to keys in the form's model.  Each of the values
-of this object is another object describing a form input control.  A `type` key identifies what kind
-of control to build, which in turn determines what [other keys](#common-options) are expected.  Any
-`type` that isn't supported builds a `<span>` containing the value of the `label` key, if one
-exists, and any other keys as attributes.  Following is a list of all currently-supported `type`s,
-and then a more detailed specification of each.  (Note that not all of these are properly supported
-in all browsers, yet; there are a number of references around the web for [which browsers support
-what][formsupport])
+fairly-straightforward JavaScript array/object.  Each index/key of the template value (referred to
+elsewhere in this README as an ID) serves as the `name` and [`ng-model`][] (where applicable) of the
+control described in the corresponding value.  Each of the values, then, is an object describing a
+form input control.  A `type` key identifies what kind of control to build, which in turn determines
+what [other keys](#common-options) are expected.  Any `type` that isn't supported builds a `<span>`
+containing the value of the `label` key, if one exists, as its content, and any other keys as
+attributes.
+
+### Supported Control Types ###
+Following is a list of all currently-supported `type`s, and then a more detailed specification of
+each.  Links to Angular documentation in the specifications below indicate that values will be
+added to the Angular-defined attributes mentioned, and that Angular provides the actual
+functionality described there.  (Note that not all of these are properly supported in all
+browsers, yet; there are a number of references around the web for [which browsers support
+what][formsupport].)
 
 * [button](#button)
 * [checkbox](#checkbox)
@@ -166,7 +176,8 @@ what][formsupport])
 
 #### Common Options ####
 * `attributes`: key-value pairs for arbitrary attributes not otherwise supported here; it is strongly
-    recommended that you use this option *only* if the attribute you need isn't already supported
+    recommended that you use this option *only* if the attribute you need isn't already supported, as
+    any attributes specified here bypass any enhancements this module provides.
 * `class`: see [`ng-class`][]
 * `callback`: see [`ng-change`][] (or [`ng-click`][] for button-like types)
 * `disabled`: see [`ng-disabled`][]
@@ -174,7 +185,8 @@ what][formsupport])
     types for exceptions to how this is handled)
 * __The following options are only supported for types that have values:__
     * `model`: overrides the control's ID as the value of [`ng-model`][] and `name` attributes;
-        allows multiple controls to be tied to a single model
+        allows multiple controls to be tied to a single model - you can nest your models further
+        by using dot notation in the value
     * `readonly`: see [`ng-readonly`][]
     * `required`: see [`ng-required`][]
     * `val`: an initial value for the model
@@ -475,6 +487,8 @@ Acknowledgements
 * [Joel Hooks][] for pointing out that the LGPL is too strong for this kind of project,
 	and that a monolithic piece of code like version 0.0.0 makes very little sense in
 	an MVVM environment.
+* For various code enhancements (see commit history for details):
+    * [Florian Rathgeber][]
 
 Issues And Assistance
 ---------------------
@@ -527,3 +541,4 @@ you prefer), and submit a pull request with your contribution(s)!
 [K. Scott Allen]: http://odetocode.com/about/scott-allen
 [OdeToCode]: http://odetocode.com
 [Joel Hooks]: http://joelhooks.com
+[Florian Rathgeber]: http://florianrathgeber.me/about/
