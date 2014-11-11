@@ -174,7 +174,7 @@ angular.module('dynform', [])
                       if (angular.isDefined(option.slaveTo)) {newChild.attr('ng-checked', option.slaveTo);}
                       if (angular.isDefined(option.val)) {
                         setProperty(model, field.model, angular.copy(option.val), childId);
-                        newChlid.attr('value', option.val);
+                        newChild.attr('value', option.val);
                       }
                       
                       if (angular.isDefined(option.label)) {
