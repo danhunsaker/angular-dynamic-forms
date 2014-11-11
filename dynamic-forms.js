@@ -430,6 +430,11 @@ angular.module('dynform', [])
       restrict: 'E',
       require: '?ngModel',
       link: function (scope, element, attrs, ctrl) {
+        if (ctrl === null) {
+          // Doesn't have an ng-model attribute; nothing to do here.
+          return;
+        }
+        
         if (attrs.type === 'file') {
           var modelGet = $parse(attrs.ngModel),
             modelSet = modelGet.assign,
