@@ -69,6 +69,8 @@ As with any other [AngularJS][] module:
 * populate your [template](#the-template) with a JSON array describing the form you want to create.
 
 ```javascript
+    $scope.formData = {};   // JavaScript needs an object to put our form's models into.
+    
     $scope.formTemplate = [
         {
             "type": "text",
@@ -85,6 +87,10 @@ As with any other [AngularJS][] module:
             "model": "submit"
         },
     ];
+    
+    $scope.processForm = function () {
+        /* Handle the form submission... */
+    };
 ```
 
 And that's about it!  Check out the demo for a more robust example, or keep reading to learn about
@@ -100,7 +106,7 @@ will be used to generate valid [`ng-model`][] attributes for the various input c
 template.  In accordance with how [AngularJS][] handles this attribute elsewhere, your entire form's
 data will be available in keys of whichever model you specify here (though nested forms are an
 exception, unless you specify a key in the outer form's model as the [`ng-model`][] of the inner
-form).
+form).  **You _must_ initialize this parent model to an object, or your app will break.**
 
 If you specify a `template-url`, the `dynamic-form` directive will retrieve the form template via
 [`$http`][] and build out your form based on the response.  Currently, failure is silently ignored.
