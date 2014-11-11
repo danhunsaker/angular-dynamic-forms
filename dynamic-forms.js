@@ -75,18 +75,25 @@ angular.module('dynform', [])
             var setProperty = function (obj, props, value, lastProp, buildParent) {
               props = props.split('.');
               lastProp = lastProp || props.pop();
+              
               for (var i = 0; i < props.length; i++) {
                 obj = obj[props[i]] = obj[props[i]] || {};
               }
-              if (!buildParent)
+              
+              if (!buildParent) {
                 obj[lastProp] = value;
+              }
             },
             bracket = function (model, base) {
               props = model.split('.');
               return (base || props.shift()) + (props.length ? "['" + props.join("']['") + "']" : '');
             },
             buildFields = function (field, id) {
-              if (!angular.isDefined(supported[field.type]) || supported[field.type] === false) {
+              if (String.charAt(id, 0) == '$') {
+                // Don't process keys added by Angular...  See GitHub Issue #29
+                return;
+              }
+              else if (!angular.isDefined(supported[field.type]) || supported[field.type] === false) {
                 //  Unsupported.  Create SPAN with field.label as contents
                 newElement = angular.element('<span></span>');
                 if (angular.isDefined(field.label)) {angular.element(newElement).html(field.label);}
