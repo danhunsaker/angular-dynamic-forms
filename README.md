@@ -496,6 +496,23 @@ Acknowledgements
 * For various code enhancements (see commit history for details):
     * [Florian Rathgeber][]
 
+Alternatives
+------------
+If this project isn't for you (it's not very mature, yet, so there are plenty of reasons it may not
+be a good fit for your projects, yet), there are some other ways to go about the same basic thing.
+They each have their own benefits and drawbacks, but I'll let their own developers speak to those,
+especially as I haven't tested any, yet.  Here are a few; let me know if you're aware of others:
+
+* [JSON Form][json-form] - A jQuery-based library for converting JSON Schemas into HTML forms;
+    a mature option with many advanced features, though centered around Twitter Bootstrap.
+* [Angular Schema Form][schema-form] - An Angular implementation of (not wrapper for) JSON Form.
+* [Alpaca][alpacajs] - Another jQuery-based library, it boasts many of the same features as JSON
+    Form.
+* [MetaWidget][metawidget] - Apparently automated, based on existing infrastructure, rather than
+    controlled by code.  Boasts compatibility with many languages and frameworks, including
+    AngularJS, Java Swing, native Android, and others.
+* [inputEx][inputex] - A YUI3 library offering.
+
 Issues And Assistance
 ---------------------
 If you notice a problem, let me know about it on [GitHub][issues-github] or
@@ -517,6 +534,12 @@ you prefer), and submit a pull request with your contribution(s)!
 [BitBucket]: https://bitbucket.org/danhunsaker/angular-dynamic-forms
 [issues-github]: https://github.com/danhunsaker/angular-dynamic-forms/issues
 [issues-bitbucket]: https://bitbucket.org/danhunsaker/angular-dynamic-forms/issues
+
+[json-form]: https://github.com/joshfire/jsonform
+[schema-form]: https://github.com/Textalk/angular-schema-form
+[alpacajs]: http://www.alpacajs.org/
+[metawidget]: http://metawidget.sourceforge.net/
+[inputex]: http://neyric.github.io/inputex/
 
 [`$http`]: http://docs.angularjs.org/api/ng.$http
 [`$parsers`]: http://docs.angularjs.org/api/ng.directive:ngModel.NgModelController
