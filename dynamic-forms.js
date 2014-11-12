@@ -89,7 +89,7 @@ angular.module('dynform', [])
               return (base || props.shift()) + (props.length ? "['" + props.join("']['") + "']" : '');
             },
             buildFields = function (field, id) {
-              if (String.charAt(id, 0) == '$') {
+              if (String(id).charAt(0) == '$') {
                 // Don't process keys added by Angular...  See GitHub Issue #29
                 return;
               }
