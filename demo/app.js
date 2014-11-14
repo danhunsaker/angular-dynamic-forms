@@ -35,6 +35,24 @@ angular.module('app', ['dynform'])
             "label": "month",
             "placeholder": "month"
           },
+          "coordinates-fieldset": {
+            "type": "fieldset",
+            "label": "nested model example",
+            "fields": {
+              "coordinates.lat": {
+                "type": "number",
+                "label": "coordinates.lat",
+                "placeholder": "coordinates.lat",
+                "val": 36.5
+              },
+              "coordinates.lon": {
+                "type": "number",
+                "label": "coordinates.lon",
+                "placeholder": "coordinates.lon",
+                "val": -0.15
+              }
+            }
+          },
           "number": {
             "type": "number",
             "label": "number",
@@ -76,16 +94,6 @@ angular.module('app', ['dynform'])
             "type": "week",
             "label": "week",
             "placeholder": "week"
-          },
-          "coordinates.lat": {
-            "type": "number",
-            "label": "coordinates.lat",
-            "placeholder": 36.5
-          },
-          "coordinates.lon": {
-            "type": "number",
-            "label": "coordinates.lon",
-            "placeholder": -0.15
           }
         }
       },
@@ -162,8 +170,8 @@ angular.module('app', ['dynform'])
           },
           "second": {
             "label": "second option",
-            "isOn": "on",
-            "isOff": "off"
+            "isOn": "on",   //  If you use Angular versions 1.3.x and up, this needs to be changed to "'on'"...
+            "isOff": "off"  //  If you use Angular versions 1.3.x and up, this needs to be changed to "'off'"...
           }
         }
       },

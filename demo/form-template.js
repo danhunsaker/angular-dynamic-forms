@@ -35,6 +35,18 @@
     "label": "color"
   },
   {
+    "type": "number",
+    "model": "coordinates.lat",
+    "label": "coordinates.lat",
+    "val": 36.5
+  },
+  {
+    "type": "number",
+    "model": "coordinates.lon",
+    "label": "coordinates.lon",
+    "val": -0.15
+  },
+  {
     "type": "date",
     "model": "date",
     "label": "date",
@@ -51,6 +63,11 @@
     "model": "datetime-local",
     "label": "datetime-local",
     "placeholder": "datetime-local"
+  },
+  {
+    "type": "text",
+    "model": "deeply.nested.model.property",
+    "label": "deeply.nested.model.property"
   },
   {
     "type": "email",
@@ -82,6 +99,17 @@
         "source": "http://angularjs.org/img/AngularJS-large.png"
       },
       {
+        "type": "legend",
+        "model": "legend",
+        "label": "legend"
+      },
+      {
+        "type": "month",
+        "model": "month",
+        "label": "month",
+        "placeholder": "month"
+      },
+      {
         "type": "checklist",
         "model": "nested.checklist",
         "label": "nested.checklist",
@@ -95,17 +123,6 @@
             "isOff": "off"
           }
         }
-      },
-      {
-        "type": "legend",
-        "model": "legend",
-        "label": "legend"
-      },
-      {
-        "type": "month",
-        "model": "month",
-        "label": "month",
-        "placeholder": "month"
       },
       {
         "type": "number",
@@ -138,11 +155,6 @@
         "val": 42,
         "minValue": -42,
         "maxValue": 84
-      },
-      {
-        "type": "text",
-        "model": "deeply.nested.model.property",
-        "label": "deeply.nested.model.property"
       }
     ]
   },
@@ -243,17 +255,5 @@
     "model": "week",
     "label": "week",
     "placeholder": "week"
-  },
-  {
-    "type": "number",
-    "model": "coordinates.lat",
-    "label": "coordinates.lat",
-    "val": 36.5
-  },
-  {
-    "type": "number",
-    "model": "coordinates.lon",
-    "label": "coordinates.lon",
-    "val": -0.15
   }
 ]

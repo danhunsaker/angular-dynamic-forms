@@ -70,13 +70,13 @@
       label > select,
       label > textarea {
         float: right;
-              width: 60%;
+        width: 60%;
       }
       
       label div > label {
         display: block;
         padding: 1ex;
-              width: 100%;
+        width: 100%;
       }
     </style>
     <!--[if lte IE 8]>
@@ -96,29 +96,29 @@
         document.createElement('ng:form');
         
         $(document).ready(function() {
-          angular.bootstrap(document);
+          angular.bootstrap(document.documentElement);
         });
       </script>
     <![endif]-->
   </head>
   <body ng-controller="AppCtrl" ng-cloak="">
     <p>This demo is a really ugly example of the basic functionality of this module.  Have a look
-    through the code and get a feel for how everything works.</p>
-  <dynamic-form class="col-md-8" template-url="form-template.js" ng-model="urlFormData">
-    <dynamic-form class="col-md-12" template="stdFormTemplate" ng-model="stdFormData">
-      <legend>template= test</legend>
+      through the code and get a feel for how everything works.</p>
+    <dynamic-form class="col-md-8" template-url="form-template.js" ng-model="urlFormData">
+      <dynamic-form class="col-md-12" template="stdFormTemplate" ng-model="stdFormData">
+        <legend>template= test</legend>
+      </dynamic-form>
+      <legend>templateUrl= test</legend>
     </dynamic-form>
-    <legend>templateUrl= test</legend>
-  </dynamic-form>
-  <div class="col-md-4">
-    <div class="fixed col-md-4">
-      <pre>stdFormData: {{stdFormData | pretty}}</pre>
-      <pre>urlFormData: {{urlFormData | pretty}}</pre>
+    <div class="col-md-4">
+      <div class="fixed col-md-4">
+        <pre>stdFormData: {{stdFormData | pretty}}</pre>
+        <pre>urlFormData: {{urlFormData | pretty}}</pre>
+      </div>
     </div>
-  </div>
-  <!-- Load scripts at the end for performance. -->
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script>
-  <script src="../dynamic-forms.js"></script>
-  <script src="app.js"></script>
+    <!-- Load scripts at the end for performance. -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script>
+    <script src="../dynamic-forms.js"></script>
+    <script src="app.js"></script>
   </body>
 </html>
