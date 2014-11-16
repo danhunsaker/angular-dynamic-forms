@@ -1,6 +1,6 @@
 {
-  "name": "angular-dynamic-forms",
-  "version": "0.0.3",
+  "name": "angular-dynforms",
+  "version": "0.0.4",
   "homepage": "https://github.com/danhunsaker/angular-dynamic-forms",
   "authors": [
     "Daniel Hunsaker <danhunsaker@gmail.com>"

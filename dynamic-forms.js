@@ -1,6 +1,6 @@
 /**
 * DynamicForms - Build Forms in AngularJS From Nothing But JSON
-* @version v0.0.3 - 2014-11-14
+* @version v0.0.4 - 2014-11-16
 * @link http://github.com/danhunsaker/angular-dynamic-forms
 * @license MIT, http://opensource.org/licenses/MIT
 */

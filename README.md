@@ -6,17 +6,43 @@ Uses the MIT License.  See `LICENSE` file for details.
 
 Installation
 ------------
+### Bower ###
+The easy way.
+
+1. `bower install angular-dynforms` (add `--save` if you want to add the dependency to your own
+    project - HIGHLY RECOMMENDED)
+
+### Git ###
+The old way.
+
 1. Clone the project from either [GitHub][] or [BitBucket][] - whichever you prefer.
 2. Copy `dynamic-forms.js` into your project wherever your other assets reside.
+
+#### Name Change ####
+When registering this project with bower, I discovered that there's another project called
+[angular-dynamic-forms][wbreza] already registered there.  The project was created at the beginning
+of October 2014, long after this one, and I haven't yet worked out if there are any similarities in
+the implementation, but as I've been thinking of shortening the name of this project for a while
+anyway, I went ahead and registered it in bower with the shorter name.  I'll be changing the repo
+name on GitHub and BitBucket, too, but not for several months, to give existing users time to
+notice the addition of full bower support.  The repo will be renamed to match the name registered
+in bower, and the bower name will not change.  It is strongly recommended to use the bower method
+so you can get the latest version of this project at any given time, regardless of whether I've
+gotten around to renaming the repo.
 
 Use
 ---
 As with any other [AngularJS][] module:
 
-* include the script into your page anywhere after [AngularJS][] itself.
+* include the script into your page anywhere after [AngularJS][] itself, using whichever mechanism
+    you use for including scripts in your project:
 
 ```html
-    <script src="assets/js/dynamic-forms.js"></script>
+    <script src="bower_components/angular-dynforms/dynamic-forms.js"></script>
+```
+
+```javascript
+    require('angular-dynforms');
 ```
 
 * _**INTERNET EXPLORER**_: This project (as with most of Angular itself) WILL NOT work
@@ -45,13 +71,13 @@ As with any other [AngularJS][] module:
             
             // IE doesn't always run the bootstrap on its own...
             $(document).ready(function() {
-              angular.bootstrap(document);
+              angular.bootstrap(document.documentElement);
             });
         </script>
     <![endif]-->
 ```
 
-* list `dynform` as a dependency of your project.
+* inject `dynform` as a dependency of your project.
 
 ```javascript
     appModule = angular.module('app', ['dynform']);
@@ -75,12 +101,17 @@ As with any other [AngularJS][] module:
         {
             "type": "text",
             "label": "First Name"
-            "model": "first"
+            "model": "name.first"
         },
         {
             "type": "text",
             "label": "Last Name"
-            "model": "last"
+            "model": "name.last"
+        },
+        {
+            "type": "email",
+            "label": "Email Address"
+            "model": "email"
         },
         {
             "type": "submit"
@@ -118,6 +149,9 @@ you need to specify a more complex [`$http`][] request with advanced authenticat
 just want to proactively handle failure to retrieve the template.  Enter the `template` attribute.
 When the directive sees `template`, it ignores any `template-url` and instead uses the array
 identified by the `template` attribute.  (See [below](#the-template) for more details on this value.)
+At some point in the future you will also be able to dynamically update this array, and the changes
+will automatically be reflected in the DOM.  This is currently unsupported, however, and for technical
+reasons, will likely not be supported at all for `templateUrl` arrays.
 
 Any other attributes you specify on the `dynamic-form` element are copied across to the `form` or
 [`ng-form`][] element that the directive builds to replace itself with.  Similarly, any pre-existing
@@ -147,9 +181,26 @@ attributes.
 Following is a list of all currently-supported `type`s, and then a more detailed specification of
 each.  Links to Angular documentation in the specifications below indicate that values will be
 added to the Angular-defined attributes mentioned, and that Angular provides the actual
-functionality described there.  (Note that not all of these are properly supported in all
+functionality described there.  Note that not all of these `type`s are properly supported in all
 browsers, yet; there are a number of references around the web for [which browsers support
-what][formsupport].)
+what][formsupport].
+
+#### Common Options ####
+* `attributes`: key-value pairs for arbitrary attributes not otherwise supported here; it is strongly
+    recommended that you use this option *only* if the attribute you need isn't already supported, as
+    any attributes specified here bypass any enhancements this module provides.
+* `class`: see [`ng-class`][]
+* `callback`: see [`ng-change`][] (or [`ng-click`][] for button-like types)
+* `disabled`: see [`ng-disabled`][]
+* `label`: wraps the control in a `<label>` tag with the value as text content (but see specific
+    types for exceptions to how this is handled)
+* __The following options are only supported for types that have values:__
+    * `model`: overrides the control's ID as the value of [`ng-model`][] and `name` attributes;
+        allows multiple controls to be tied to a single model - you can nest your models further
+        by using dot notation in the value
+    * `readonly`: see [`ng-readonly`][]
+    * `required`: see [`ng-required`][]
+    * `val`: an initial value for the model
 
 * [button](#button)
 * [checkbox](#checkbox)
@@ -179,23 +230,6 @@ what][formsupport].)
 * [time](#time)
 * [url](#url)
 * [week](#week)
-
-#### Common Options ####
-* `attributes`: key-value pairs for arbitrary attributes not otherwise supported here; it is strongly
-    recommended that you use this option *only* if the attribute you need isn't already supported, as
-    any attributes specified here bypass any enhancements this module provides.
-* `class`: see [`ng-class`][]
-* `callback`: see [`ng-change`][] (or [`ng-click`][] for button-like types)
-* `disabled`: see [`ng-disabled`][]
-* `label`: wraps the control in a `<label>` tag with the value as text content (but see specific
-    types for exceptions to how this is handled)
-* __The following options are only supported for types that have values:__
-    * `model`: overrides the control's ID as the value of [`ng-model`][] and `name` attributes;
-        allows multiple controls to be tied to a single model - you can nest your models further
-        by using dot notation in the value
-    * `readonly`: see [`ng-readonly`][]
-    * `required`: see [`ng-required`][]
-    * `val`: an initial value for the model
 
 #### button ####
 * __Renders:__ `<button></button>`
@@ -512,6 +546,7 @@ especially as I haven't tested any, yet.  Here are a few; let me know if you're 
     controlled by code.  Boasts compatibility with many languages and frameworks, including
     AngularJS, Java Swing, native Android, and others.
 * [inputEx][inputex] - A YUI3 library offering.
+* ["The Other" ADF][wbreza] - Wallace Breza's project with the same name this one started with.
 
 Issues And Assistance
 ---------------------
@@ -535,6 +570,7 @@ you prefer), and submit a pull request with your contribution(s)!
 [issues-github]: https://github.com/danhunsaker/angular-dynamic-forms/issues
 [issues-bitbucket]: https://bitbucket.org/danhunsaker/angular-dynamic-forms/issues
 
+[wbreza]: https://github.com/wbreza/angular-dynamic-forms
 [json-form]: https://github.com/joshfire/jsonform
 [schema-form]: https://github.com/Textalk/angular-schema-form
 [alpacajs]: http://www.alpacajs.org/
