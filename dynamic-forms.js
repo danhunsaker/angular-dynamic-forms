@@ -47,8 +47,8 @@ angular.module('dynform', [])
         'hidden': {element: 'input', type: 'hidden', editable: false, textBased: false, class: ''},
         'image': {element: 'input', type: 'image', editable: false, textBased: false, class: ''},
         'legend': {element: 'legend', editable: false, textBased: false, class: ''},
-        'reset': {element: 'button', type: 'reset', editable: false, textBased: false, class: 'btn btn-danger btn-xm'},
-        'submit': {element: 'button', type: 'submit', editable: false, textBased: false, class: 'btn btn-lg btn-success'}
+        'reset': {element: 'button', type: 'reset', editable: false, textBased: false, class: ''},
+        'submit': {element: 'button', type: 'submit', editable: false, textBased: false, class: ''}
       };
     
     return {
