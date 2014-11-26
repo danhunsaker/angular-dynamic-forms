@@ -316,13 +316,6 @@ angular.module('dynform', [])
                   //  Button elements get their labels from their contents.
                   else if (["button", "legend", "reset", "submit"].indexOf(field.type) > -1) {
                     newElement.html(field.label);
-                    //Maybe later
-                    //if (angular.isDefined(field.class)) {newElement.attr('class', field.class);}
-                    //if (typeof field.class != 'undefined') {
-                    //  newElement.toggleClass(field.class);
-                    //} else if (typeof supported[field.type].class) {
-                    //  newElement.toggleClass(supported[field.type].class);
-                    //} 
                     if (angular.isDefined(supported[field.type].class)) {newElement.attr('class', supported[field.type].class);}
                   }
                   //  Everything else should be wrapped in a label tag.
