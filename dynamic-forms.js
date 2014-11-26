@@ -47,7 +47,7 @@ angular.module('dynform', [])
         'hidden': {element: 'input', type: 'hidden', editable: false, textBased: false, class: ''},
         'image': {element: 'input', type: 'image', editable: false, textBased: false, class: ''},
         'legend': {element: 'legend', editable: false, textBased: false, class: ''},
-        'reset': {element: 'button', type: 'reset', editable: false, textBased: false, class: 'btn btn-danger btn-xs'},
+        'reset': {element: 'button', type: 'reset', editable: false, textBased: false, class: 'btn btn-danger btn-xm'},
         'submit': {element: 'button', type: 'submit', editable: false, textBased: false, class: 'btn btn-lg btn-success'}
       };
     
@@ -97,6 +97,7 @@ angular.module('dynform', [])
                 //  Unsupported.  Create SPAN with field.label as contents
                 newElement = angular.element('<span></span>');
                 if (angular.isDefined(field.label)) {angular.element(newElement).html(field.label);}
+                if (angular.isDefined(supported[field.type].class)) {newElement.attr('class', supported[field.type].class);}
                 angular.forEach(field, function (val, attr) {
                   if (["label", "type"].indexOf(attr) > -1) {return;}
                   newElement.attr(attr, val);
@@ -124,6 +125,7 @@ angular.module('dynform', [])
                     
                   if (angular.isDefined(field.readonly)) {newElement.attr('ng-readonly', field.readonly);}
                   if (angular.isDefined(field.required)) {newElement.attr('ng-required', field.required);}
+                  if (angular.isDefined(supported[field.type].class)) {newElement.attr('class', supported[field.type].class);}
                   if (angular.isDefined(field.val)) {
                     setProperty(model, field.model, angular.copy(field.val));
                     newElement.attr('value', field.val);
@@ -136,6 +138,7 @@ angular.module('dynform', [])
                   if (angular.isDefined(field.maxLength)) {newElement.attr('ng-maxlength', field.maxLength);}
                   if (angular.isDefined(field.validate)) {newElement.attr('ng-pattern', field.validate);}
                   if (angular.isDefined(field.placeholder)) {newElement.attr('placeholder', field.placeholder);}
+                  if (angular.isDefined(supported[field.type].class)) {newElement.attr('class', supported[field.type].class);}
                 }
                 
                 //  Special cases
@@ -143,14 +146,17 @@ angular.module('dynform', [])
                   if (angular.isDefined(field.minValue)) {newElement.attr('min', field.minValue);}
                   if (angular.isDefined(field.maxValue)) {newElement.attr('max', field.maxValue);}
                   if (angular.isDefined(field.step)) {newElement.attr('step', field.step);}
+                  if (angular.isDefined(supported[field.type].class)) {newElement.attr('class', supported[field.type].class);}
                 }
                 else if (['text', 'textarea'].indexOf(field.type) > -1) {
                   if (angular.isDefined(field.splitBy)) {newElement.attr('ng-list', field.splitBy);}
+                  if (angular.isDefined(supported[field.type].class)) {newElement.attr('class', supported[field.type].class);}
                 }
                 else if (field.type === 'checkbox') {
                   if (angular.isDefined(field.isOn)) {newElement.attr('ng-true-value', field.isOn);}
                   if (angular.isDefined(field.isOff)) {newElement.attr('ng-false-value', field.isOff);}
                   if (angular.isDefined(field.slaveTo)) {newElement.attr('ng-checked', field.slaveTo);}
+                  if (angular.isDefined(supported[field.type].class)) {newElement.attr('class', supported[field.type].class);}
                 }
                 else if (field.type === 'checklist') {
                   if (angular.isDefined(field.val)) {
@@ -199,6 +205,7 @@ angular.module('dynform', [])
                       if (angular.isDefined(field.callback)) {newChild.attr('ng-change', field.callback);}
                       if (angular.isDefined(field.readonly)) {newChild.attr('ng-readonly', field.readonly);}
                       if (angular.isDefined(field.required)) {newChild.attr('ng-required', field.required);}
+                      if (angular.isDefined(supported[field.type].class)) {newElement.attr('class', supported[field.type].class);}
                       newChild.attr('value', val);
                       if (angular.isDefined(field.val) && field.val === val) {newChild.attr('checked', 'checked');}
                       
@@ -213,7 +220,8 @@ angular.module('dynform', [])
                 else if (field.type === 'select') {
                   if (angular.isDefined(field.multiple) && field.multiple !== false) {newElement.attr('multiple', 'multiple');}
                   if (angular.isDefined(field.empty) && field.empty !== false) {newElement.append(angular.element($document[0].createElement('option')).attr('value', '').html(field.empty));}
-                  
+                  if (angular.isDefined(supported[field.type].class)) {newElement.attr('class', supported[field.type].class);}
+
                   if (angular.isDefined(field.autoOptions)) {
                     newElement.attr('ng-options', field.autoOptions);
                   }
@@ -247,10 +255,13 @@ angular.module('dynform', [])
                 else if (field.type === 'image') {
                   if (angular.isDefined(field.label)) {newElement.attr('alt', field.label);}
                   if (angular.isDefined(field.source)) {newElement.attr('src', field.source);}
+                  if (angular.isDefined(supported[field.type].class)) {newElement.attr('class', supported[field.type].class);}
                 }
                 else if (field.type === 'hidden') {
                   newElement.attr('name', bracket(field.model));
                   newElement.attr('ng-model', bracket(field.model, attrs.ngModel));
+                  if (angular.isDefined(supported[field.type].class)) {newElement.attr('class', supported[field.type].class);}
+
                   if (angular.isDefined(field.val)) {
                     setProperty(model, field.model, angular.copy(field.val));
                     newElement.attr('value', field.val);
@@ -260,6 +271,7 @@ angular.module('dynform', [])
                   if (angular.isDefined(field.multiple)) {
                     newElement.attr('multiple', field.multiple);
                   }
+                  if (angular.isDefined(supported[field.type].class)) {newElement.attr('class', supported[field.type].class);}
                 }
                 else if (field.type === 'fieldset') {
                   if (angular.isDefined(field.fields)) {
@@ -267,11 +279,13 @@ angular.module('dynform', [])
                     angular.forEach(field.fields, buildFields, newElement);
                     newElement = workingElement;
                   }
+                  if (angular.isDefined(supported[field.type].class)) {newElement.attr('class', supported[field.type].class);}
                 }
                 
                 //  Common attributes; radio already applied these...
                 if (field.type !== "radio") {
                   if (angular.isDefined(field['class'])) {newElement.attr('ng-class', field['class']);}
+                  if (angular.isDefined(supported[field.type].class)) {newElement.attr('class', supported[field.type].class);}
                   //  ...and checklist has already applied these.
                   if (field.type !== "checklist") {
                     if (angular.isDefined(field.disabled)) {newElement.attr('ng-disabled', field.disabled);}
@@ -302,15 +316,14 @@ angular.module('dynform', [])
                   //  Button elements get their labels from their contents.
                   else if (["button", "legend", "reset", "submit"].indexOf(field.type) > -1) {
                     newElement.html(field.label);
-                    //newElement.toggleClass("btn btn-primary");
-                    //newElement.toggleClass(supported[field.type].class);
-                    //newElement.toggleClass(field.class);
-                    if (typeof field.class != 'undefined') {
-                      newElement.toggleClass(field.class);
-                    } else if (typeof supported[field.type].class) {
-                      newElement.toggleClass(supported[field.type].class);
-                    } 
-                    
+                    //Maybe later
+                    //if (angular.isDefined(field.class)) {newElement.attr('class', field.class);}
+                    //if (typeof field.class != 'undefined') {
+                    //  newElement.toggleClass(field.class);
+                    //} else if (typeof supported[field.type].class) {
+                    //  newElement.toggleClass(supported[field.type].class);
+                    //} 
+                    if (angular.isDefined(supported[field.type].class)) {newElement.attr('class', supported[field.type].class);}
                   }
                   //  Everything else should be wrapped in a label tag.
                   else {
