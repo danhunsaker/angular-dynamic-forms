@@ -100,21 +100,21 @@ As with any other [AngularJS][] module:
     $scope.formTemplate = [
         {
             "type": "text",
-            "label": "First Name"
+            "label": "First Name”,
             "model": "name.first"
         },
         {
             "type": "text",
-            "label": "Last Name"
+            "label": "Last Name”,
             "model": "name.last"
         },
         {
             "type": "email",
-            "label": "Email Address"
+            "label": "Email Address”,
             "model": "email"
         },
         {
-            "type": "submit"
+            "type": "submit”,
             "model": "submit"
         },
     ];
