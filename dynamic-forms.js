@@ -430,7 +430,7 @@ angular.module('dynform', [])
       restrict: 'E',
       require: '?ngModel',
       link: function (scope, element, attrs, ctrl) {
-        if (ctrl === null) {
+        if (!ctrl) {
           // Doesn't have an ng-model attribute; nothing to do here.
           return;
         }
