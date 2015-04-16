@@ -301,13 +301,40 @@ angular.module('dynform', [])
                   }
                   //  Button elements get their labels from their contents.
                   else if (["button", "legend", "reset", "submit"].indexOf(field.type) > -1) {
-                    newElement.html(field.label);
+                    newElement.html(field.label).addClass("btn");
                   }
-                  //  Everything else should be wrapped in a label tag.
+                   //  check box
+                  else if (["checkbox"].indexOf(field.type) > -1) {
+
+                    formGroupWrapper = angular.element('<div/>').addClass("checkbox");
+
+                    newElement = formGroupWrapper.append(
+                        angular.element('<label/>').text(" " + field.label).append(newElement)
+                    );
+
+                  // Radio group
+                  } else if (["radio"].indexOf(field.type) > -1) {
+
+                    newElement = newElement.wrap('<div class="radio-group"/>').parent();
+
+                  }
+                  //  Everything else should be wrapped in a div tag.
                   else {
-                    newElement = newElement.wrap('<label></label>').parent();
-                    newElement.prepend(document.createTextNode(field.label + ' '));
+
+                    formGroupWrapper = angular.element('<div/>').addClass("form-group");
+
+                    formGroupWrapper.append(
+                        angular.element('<label/>').text(field.label)
+                    );
+
+                    if (field.type != "file" && field.type != "range" && field.type != "checklist") {
+                      newElement.addClass('form-control');
+                    }
+
+                    newElement = newElement.wrap(formGroupWrapper).parent();
+
                   }
+
                 }
                 
                 // Arbitrary attributes
@@ -316,10 +343,10 @@ angular.module('dynform', [])
                     newElement.attr(attr, val);
                   });
                 }
-                
-                // Add the element to the page
+               
                 this.append(newElement);
                 newElement = null;
+               
               }
             };
             
