@@ -1,0 +1,108 @@
+{
+   "Load": {
+      "type": "fieldset",
+      "label": "Load",
+      "name": "Load",
+      "fields": {
+         "Load options" : {
+            "label" : "Load options",
+            "options" : {
+               "Main" : {
+                  "label" : "Main"
+               },
+               "Center" : {
+                  "label" : "Center"
+               },
+               "Others" : {
+                  "label" : "Others"
+               },
+               "Optional" : {
+                  "label" : "Optional"
+               }
+            },
+            "type" : "select"
+         },         
+         "Main": {
+            "type": "fieldset",
+            "label": "Main",
+            "name": "Main",
+            "attributes": {"ng-disabled": "urlFormData['Load options'] != 'Main'"},
+            "fields": {   
+               "main options": {
+                  "type" : "select",
+                  "label": "Main Options",
+                  "options": {
+                     "LbsPerTankOpt" : {
+                        "label" : "LbsPerTank"
+                     },
+                     "PercentageOpt" : {
+                        "label" : "Percentage"
+                     }
+                  }
+               },
+               "LbsPerTank": {
+                  "type": "number",
+                  "label": "LbsPerTank",
+                  "minValue": 200,
+                  "maxValue": 300
+               },
+               "MPercentage": {
+                  "type": "number",
+                  "label": "Percentage",
+                  "minValue": 0,
+                  "maxValue": 100
+               }
+            }
+         },
+         "Center": {
+            "type": "fieldset",
+            "label": "Center",
+            "name": "Center",
+            "attributes": {"ng-disabled": "urlFormData['Load options'] != 'Center'"},
+            "fields": {   
+               "center options": {
+                  "type" : "select",
+                  "label": "Center Options",
+                  "options": {
+                     "CLbsOpt" : {
+                        "label" : "Lbs"
+                     },
+                     "CPercentageOpt" : {
+                        "label" : "Percentage"
+                     }
+                  }
+               },
+               "Lbs": {
+                  "type": "number",
+                  "label": "Lbs",
+                  "minValue": 200,
+                  "maxValue": 300
+               },
+               "CPercentage": {
+                  "type": "number",
+                  "label": "Percentage",
+                  "minValue": 0,
+                  "maxValue": 100
+               }
+            }
+         },
+         "Others": {
+            "type": "fieldset",
+            "label": "Others",
+            "name": "Others",
+            "attributes": {"ng-disabled": "urlFormData['Load options'] != 'Others'"},
+            "fields": {   
+               "txtOthers": {
+                  "type": "textarea",
+                  "label": "Others",
+                  "name": "txtOthers"
+               }
+            }
+         },
+         "Optional": {
+            "type": "label",
+            "label": "Optional"
+         }
+      }
+   }
+}
