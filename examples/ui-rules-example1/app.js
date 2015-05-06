@@ -3,9 +3,9 @@ angular.module('app', ['dynform'])
         $scope.urlFormData = {};   // JavaScript needs an object to put our form's models into.
 
         $scope.processForm = function () {
-            alert ($scope.urlFormData.MACH_NUMBER);
+            alert ($scope.urlFormData.loadopt);
         };
-        
+
     }])
     .filter('nl2br', function() {
         return function (input) {
