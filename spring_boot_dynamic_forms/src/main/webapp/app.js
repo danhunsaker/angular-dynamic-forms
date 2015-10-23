@@ -5,24 +5,24 @@ angular.module('appDynApp', ['ui.router', 'ngSanitize', 'ui.bootstrap', 'ngTagsI
 	.config(['$stateProvider','$urlRouterProvider',
 	function($stateProvider, $urlRouterProvider) {
 	
-		$urlRouterProvider.otherwise('/cgaas');
-		$urlRouterProvider.when('/cgaas', '/cgaas/listAttributes');
+		$urlRouterProvider.otherwise('/dynforms');
+		$urlRouterProvider.when('/dynforms', '/dynforms/listAttributes');
 		
         $stateProvider
             
-			.state('cgaas', {
-				url:'/cgaas',
+			.state('dynforms', {
+				url:'/dynforms',
 				controller:'masterDataCtrl',
-				templateUrl:'views/navigation/cgaas.html'                            
+				templateUrl:'views/navigation/dynforms.html'                            
             })
-			.state('cgaas.listAttributes', {
+			.state('dynforms.listAttributes', {
 				url: '/listAttributes?formid',
 				controller:'listAttributesCtrl',
-				templateUrl: 'views/navigation/cgaas-listAttributes.html'
+				templateUrl: 'views/navigation/dynforms-listAttributes.html'
 			})
-			.state('cgaas.renderAttributes', {
+			.state('dynforms.renderAttributes', {
 				url: '/renderAttributes?formid&dataid',
 				controller:'renderAttributesCtrl',
-				templateUrl: 'views/navigation/cgaas-renderAttributes.html'
+				templateUrl: 'views/navigation/dynforms-renderAttributes.html'
 			})
     }]);

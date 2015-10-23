@@ -23,7 +23,7 @@
             </thead>
             <tbody>
                 <tr ng-repeat="message in messages | filter:query">
-                    <td><a ui-sref="cgaas.renderAttributes( {formid: '{{formid}}', dataid: '{{message.id}}' } )">{{message.name}}</a></td>
+                    <td><a ui-sref="dynforms.renderAttributes( {formid: '{{formid}}', dataid: '{{message.id}}' } )">{{message.name}}</a></td>
                     <td class="text-center">
                         <a href=""><span class="glyphicon glyphicon-remove" ng-click="deleteAttribute(message.id)" style="color:red"></span></a>
                     </td>

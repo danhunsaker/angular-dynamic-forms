@@ -23,9 +23,9 @@
 	            <tbody>
 	                <tr ng-repeat="menuEntry in menuEntries | filter:query">
 						<td>{{menuEntry.displayName}}: </td>
-						<td><a ui-sref="cgaas.listAttributes( {formid: '{{menuEntry.id}}' } )">List</a></td> 
+						<td><a ui-sref="dynforms.listAttributes( {formid: '{{menuEntry.id}}' } )">List</a></td> 
 						<td>|</td> 
-						<td><a ui-sref="cgaas.renderAttributes( {formid: '{{menuEntry.id}}', dataid: '0' })">Create</a></td>					
+						<td><a ui-sref="dynforms.renderAttributes( {formid: '{{menuEntry.id}}', dataid: '0' })">Create</a></td>					
 					</tr>
 	            </tbody>
 	        </table>
