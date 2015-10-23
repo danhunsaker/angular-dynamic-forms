@@ -1,4 +1,4 @@
-package com.boeing.cgaas;
+package com.springboot.dynaform;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.boeing.cgaas.dao.UiFormDao;
-import com.boeing.cgaas.dto.UiForm;
+import com.springboot.dynaform.dao.UiFormDao;
+import com.springboot.dynaform.dto.UiForm;
 
 @RestController
 @EnableAutoConfiguration
@@ -30,16 +30,6 @@ public class DynamicController {
 	UiFormDao dao;
 
 	public DynamicController() throws NamingException {
-		/*
-		 * When we implement jboss based we can uncomment below code.
-		 * 
-		 * JndiTemplate jndiTemplate = new JndiTemplate();
-		 * 
-		 * DataSource dataSource = (DataSource)
-		 * jndiTemplate.lookup("java:jboss/datasources/ecfdcg"); JdbcTemplate
-		 * jdbcTemplate = new JdbcTemplate(dataSource); dao = new
-		 * UiFormDao(jdbcTemplate);
-		 */
 	}
 
 	private static Logger logger = Logger.getLogger(DynamicController.class);

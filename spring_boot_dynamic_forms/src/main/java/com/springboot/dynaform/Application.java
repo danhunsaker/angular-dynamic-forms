@@ -1,4 +1,4 @@
-package com.boeing.cgaas;
+package com.springboot.dynaform;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;

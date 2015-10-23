@@ -1,4 +1,4 @@
-package com.boeing.cgaas.dto;
+package com.springboot.dynaform.dto;
 
 import lombok.Getter;
 import lombok.Setter;

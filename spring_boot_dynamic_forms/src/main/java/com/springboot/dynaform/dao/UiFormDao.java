@@ -1,4 +1,4 @@
-package com.boeing.cgaas.dao;
+package com.springboot.dynaform.dao;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -16,8 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
-import com.boeing.cgaas.dto.UiForm;
-import com.boeing.cgaas.dto.UiFormLink;
+import com.springboot.dynaform.dto.UiForm;
+import com.springboot.dynaform.dto.UiFormLink;
 
 @Component
 public class UiFormDao {
