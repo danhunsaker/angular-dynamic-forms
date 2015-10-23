@@ -1,0 +1,14 @@
+<div class="flka-list-entry">
+    <div class="crop">
+        <img ng-src="{{ thumb }}" />
+    </div>
+    <h2><a href="#/navigation/view/{{entryIndex}}">{{ postTitle }}</a></h2>
+
+    <p class="pushUp"><strong>Published:</strong> {{ published | date  : "medium" }}</p>
+    <p class="pushUp"><a tooltip-placement="bottom"
+                                   tooltip="This was uploaded by {{author |  tidyAuthor}}"
+                                      href="http://www.flickr.com/people/{{authorId}}"
+                                    target="_blank"><strong>Photo author</strong></a>
+                      ( <a href="{{flickrLink}}">View on Flickr</a> )</p>
+
+</div>

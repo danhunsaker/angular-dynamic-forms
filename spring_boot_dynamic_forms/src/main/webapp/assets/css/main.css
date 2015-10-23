@@ -1,0 +1,95 @@
+.form-group.required .control-label:after { 
+   content:"*";
+   color:red;
+}
+
+.modal-body {
+	max-height: 450px;	
+	overflow-y: auto;
+}
+
+.active-sidebar{
+	background-color: #eee;
+    text-decoration: none;
+}
+
+.form-group .help-block {
+  display: none;
+}
+
+.form-group.has-error .help-block {
+  display: block;
+}
+
+.bootstrap .tags {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+
+.bootstrap .tags.focused {
+    border-color: #66afe9;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,0.075),0 0 8px rgba(102,175,233,0.6);
+}
+
+.bootstrap .tags .tag-item {
+    background: #428bca;
+    border: 1px solid #357ebd;
+    border-radius: 4px;
+    color: #fff;
+}
+
+.bootstrap .tags .tag-item.selected {
+    background: #d9534f;
+    border: 1px solid #d43f3a;
+    border-radius: 4px;
+    color: #fff;
+}
+
+.bootstrap .tags .tag-item button {
+    background: transparent;
+    color: #000;
+    opacity: .4;
+}
+
+.bootstrap .autocomplete {
+    border-radius: 4px;
+}
+
+.bootstrap .autocomplete .tag-item.selected {
+    color: #262626;
+    background-color: #e9e9e9;
+}
+
+/*css for controls start*/
+.controlwidth{
+	width:70%;
+}
+
+.noBorder{
+	border:0px;
+}
+
+html, body, .form-control, tags-input .tags .input,label {
+    color: #666 !important;
+    font-family: "Helvetica Neue Regular","Helvetica Neue","Arial" !important;
+    font-size: 12px !important;
+    font-weight: normal;
+}
+.noBold{
+	font-weight: normal;
+}
+.fontLegend{
+	font-size: 14px;
+}
+.alignImageCancel{
+	  position: absolute;
+    right: 0;
+    text-align: right;
+}
+
+.FullWidth{
+	width: 100%;
+}
