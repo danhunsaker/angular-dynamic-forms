@@ -1,13 +1,10 @@
 package com.springboot.dynaform;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.naming.NamingException;
-
-import lombok.val;
 
 import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
@@ -21,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.springboot.dynaform.dao.UiFormDao;
 import com.springboot.dynaform.dto.UiForm;
+
+import lombok.val;
 
 @RestController
 @EnableAutoConfiguration
@@ -48,12 +47,7 @@ public class DynamicController {
 
 	@RequestMapping("/getFormDataList/{form_id}")
 	public List<JSONObject> getFormDataList(@PathVariable("form_id") int formId) {
-		List<Map> list = dao.getFormDataList(formId);
-		List<JSONObject> jsonList = new ArrayList<JSONObject>();
-
-		list.forEach(x -> jsonList.add(new JSONObject(x)));
-
-		return jsonList;
+		return dao.getFormDataList(formId).stream().map(x -> new JSONObject(x)).collect(Collectors.toList());
 	}
 
 	@RequestMapping("/getFormData/{form_id}/{data_id}")
