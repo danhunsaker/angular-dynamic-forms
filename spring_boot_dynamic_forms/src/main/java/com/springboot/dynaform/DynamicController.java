@@ -67,4 +67,10 @@ public class DynamicController {
 
 		return json3;
 	}
+	
+	@RequestMapping("/testStream")
+	public void testStream() {
+		dao.testStream();
+	}
+
 }

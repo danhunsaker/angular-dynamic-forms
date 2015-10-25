@@ -12,7 +12,7 @@ CREATE TABLE ui_form_link
   ui_form_link_id integer
 );
 
-CREATE TABLE policy
+CREATE TABLE policy_auth
 (
   auth_type varchar(100),
   start_date date,
@@ -49,15 +49,15 @@ CREATE TABLE country
   name varchar(100) NOT NULL,
 );
 
-CREATE TABLE policy_citizen_relationship
+CREATE TABLE policy_auth_citizen_relationship
 (
-  policy_id integer,
+  policy_auth_id integer,
   citizen_id integer
 );
 
-CREATE TABLE policy_country_relationship
+CREATE TABLE policy_auth_country_relationship
 (
-  policy_id integer,
+  policy_auth_id integer,
   country_id integer
 );
 

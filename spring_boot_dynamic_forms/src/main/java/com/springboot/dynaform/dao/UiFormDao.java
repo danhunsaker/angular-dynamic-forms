@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import lombok.val;
 
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Component;
 
 import com.springboot.dynaform.dto.UiForm;
 import com.springboot.dynaform.dto.UiFormLink;
+import com.springboot.dynaform.util.JdbcStream;
 
 @Component
 public class UiFormDao {
@@ -116,7 +119,7 @@ public class UiFormDao {
 		if (dataId != 0) {
 			relnList1 = jdbcTemplate.query(sql, (rs, rowNum) -> {
 				return rs.getObject(1) + "#" + rs.getObject(2);
-			}, dataId);
+			} , dataId);
 		}
 
 		val relnList = relnList1;
@@ -170,7 +173,7 @@ public class UiFormDao {
 					json.put(name, innerJson);
 				}
 				return "";
-			}, dataId);
+			} , dataId);
 		} else {
 			val sql = String.format("select * from %s", form.getFormTableName());
 			generateCreateJson(sql, json);
@@ -182,7 +185,7 @@ public class UiFormDao {
 			ResultSetMetaData rsmd = rs.getMetaData();
 			for (int i = 1; i < rsmd.getColumnCount() + 1; i++) {
 				String name = rsmd.getColumnName(i).toLowerCase();
-				
+
 				Map innerJson = new LinkedHashMap();
 				innerJson.put("type", getType(rsmd.getColumnTypeName(i).toLowerCase(), name));
 				innerJson.put("label", getDiplayName(name));
@@ -194,10 +197,10 @@ public class UiFormDao {
 
 	private Object getType(String columnTypeName, String name) {
 		// TODO Auto-generated method stub
-		if(name.equals("id")){
+		if (name.equals("id")) {
 			return "label";
 		}
-		switch(columnTypeName){
+		switch (columnTypeName) {
 		case "varchar":
 		case "varchar_ignorecase":
 			return "text";
@@ -228,5 +231,14 @@ public class UiFormDao {
 
 	public void saveFormData(JSONObject input) {
 		logger.debug(input);
+	}
+
+	public void testStream() {
+		String sql = "select * from ui_form";
+		JdbcStream jdbcStream = new JdbcStream(jdbcTemplate);
+		Set<String> results = jdbcStream.<Set<String>> streamQuery(sql, stream -> stream.map(row -> row.getString(1))
+				.filter(s -> s.charAt(0) == 'c').collect(Collectors.toSet()));
+		
+		results.forEach(System.out::println);
 	}
 }
