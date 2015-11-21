@@ -7,8 +7,8 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.Map;
+
+import lombok.val;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -32,9 +32,9 @@ public class FormsTemplateServiceTest {
 	@Before
 	public void init() throws IOException {
 		formsService.deleteAll();
-		String payload = readFile("src/main/resources/schema/form-template.json", Charset.defaultCharset());
-		ObjectMapper om = new ObjectMapper();
-		FormInformation formTemplate = om.readValue(payload, FormInformation.class);
+		val payload = readFile("src/test/resources/schema/form-template.json", Charset.defaultCharset());
+		val om = new ObjectMapper();
+		val formTemplate = om.readValue(payload, FormInformation.class);
 		formsService.save(formTemplate);
 	}
 
@@ -45,7 +45,7 @@ public class FormsTemplateServiceTest {
 	
 	@Test
 	public void testFindAll() throws Exception {
-		List<String> list = formsService.findAllFormTemplates();
+		val list = formsService.findAllFormTemplates();
 		
 		assertEquals(list.size(), 1);
 		
@@ -54,15 +54,15 @@ public class FormsTemplateServiceTest {
 	
 	@Test
 	public void testFindByName() throws JsonParseException, JsonMappingException, IOException {
-		FormInformation formTemplate= formsService.findTemplateByName("fuelload");
+		val formTemplate= formsService.findTemplateByName("fuelload");
 				
 		assertEquals(formTemplate.getRootnode().getId(), "fuelload");
 		
-		Map<String, Object> map = Utils.convertAttributeToUi(formTemplate);
+		val map = Utils.convertAttributeToUi(formTemplate);
 		assertNotNull(map);
 	}
 	
-	List<String> findAllByNames1() {
+	void findAllByNames1() {
 		// db[db.runCommand({"mapreduce" : "formTemplates",
 		// "map" : function() {for (var key in this) { emit(key, null); }},
 		// "reduce" : function(key, stuff) {return null;},
@@ -77,7 +77,5 @@ public class FormsTemplateServiceTest {
 		//List<String> l = template.getCollection(formTemplates + "_keys").distinct("_id");
 
 		//return l.stream().filter(x -> !x.equals("_id")).collect(Collectors.toList());
-		return null;
 	}
-
 }
