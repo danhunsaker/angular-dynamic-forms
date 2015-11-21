@@ -1,28 +1,38 @@
 'use strict';
 
-angular.module('appDynApp', ['ui.router', 'ngSanitize', 'ui.bootstrap', 'ngTagsInput', 'angularTreeview', 'dynform', 'ngGrid'])
+angular.module('appDynApp', ['ui.router', 'ngSanitize', 'ngTagsInput', 'ui.bootstrap', 'angularTreeview', 'dynform', 'ngGrid'])
 
 	.config(['$stateProvider','$urlRouterProvider',
 	function($stateProvider, $urlRouterProvider) {
 	
-		$urlRouterProvider.otherwise('/dynforms');
-		$urlRouterProvider.when('/dynforms', '/dynforms/listAttributes');
+		$urlRouterProvider.otherwise('/formbuilder');
+		$urlRouterProvider.when('/formbuilder', '/formbuilder/listDesignOfForms');
 		
         $stateProvider
             
-			.state('dynforms', {
-				url:'/dynforms',
+			.state('formbuilder', {
+				url:'/formbuilder',
 				controller:'masterDataCtrl',
-				templateUrl:'views/navigation/dynforms.html'                            
+				templateUrl:'views/navigation/formbuilder.html'                            
             })
-			.state('dynforms.listAttributes', {
-				url: '/listAttributes?formid',
-				controller:'listAttributesCtrl',
-				templateUrl: 'views/navigation/dynforms-listAttributes.html'
+			.state('formbuilder.listDesignOfForms', {
+				url: '/listDesignOfForms',
+				controller:'listDesignOfFormsCtrl',
+				templateUrl: 'views/navigation/formbuilder-listDesignOfForms.html'
 			})
-			.state('dynforms.renderAttributes', {
-				url: '/renderAttributes?formid&dataid',
-				controller:'renderAttributesCtrl',
-				templateUrl: 'views/navigation/dynforms-renderAttributes.html'
+			.state('formbuilder.renderDesignOfForms', {
+				url: '/renderDesignOfForms?formid',
+				controller:'listDesignOfFormCreateCtrl',
+				templateUrl: 'views/navigation/formbuilder-designOfFormsCreate.html'
+			})
+			.state('formbuilder.listFormData', {
+				url: '/listFormData?formid',
+				controller:'listFormDataCtrl',
+				templateUrl: 'views/navigation/formbuilder-listFormData.html'
+			})
+			.state('formbuilder.renderFormData', {
+				url: '/renderFormData?formid&dataid',
+				controller:'renderFormDataCtrl',
+				templateUrl: 'views/navigation/formbuilder-renderFormData.html'
 			})
     }]);
