@@ -1,5 +1,7 @@
 angular-dynamic-forms
 =====================
+
+[![Join the chat at https://gitter.im/danhunsaker/angular-dynamic-forms](https://badges.gitter.im/danhunsaker/angular-dynamic-forms.svg)](https://gitter.im/danhunsaker/angular-dynamic-forms?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 Build Forms in AngularJS From Nothing But JSON
 
 Uses the MIT License.  See `LICENSE` file for details.
