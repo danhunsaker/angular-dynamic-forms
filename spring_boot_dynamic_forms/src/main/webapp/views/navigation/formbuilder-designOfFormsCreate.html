@@ -1,0 +1,128 @@
+			<div ng-controller="listDesignOfFormCreateCtrl">
+			<legend class="noBold fontLegend col-md-12">{{heading}}</legend>
+				<div class="row col-sm-12">
+					<div class="col-sm-7"
+					  data-angular-treeview="true"
+					  data-tree-id="mytree"
+					  data-tree-model="roleList" ng-click="DisableAddChild('edit')">
+					</div>
+					<div class="button_panel col-sm-5 text-center">
+						<button data-ng-click="SetMode('editNode')" class="btn btn-primary btn-sm" data-ng-disabled="!mytree.currentNode">EDIT NODE</button>
+						<button data-ng-click="SetMode('addChild')"  class="btn btn-primary btn-sm" data-ng-disabled="!mytree.currentNode || disableAddChild">ADD CHILD</button>
+						<button class="btn btn-primary btn-sm" data-ng-disabled="!mytree.currentNode || disableAddChild" ng-click="ShowExistingAttributes('edit')">ADD EXISTING NODE</button>
+						<div class="input_panel text-left" data-ng-show="mode == 'editNode'">
+						  <h4>Selected Node</h4>
+							<label>Datatype</label>  <select data-ng-model="mytree.currentNode.datatype" ng-change="DisableAddChild('edit')">
+  														<option value="Composite-selectsingle">Composite-selectsingle</option>
+  														<option value="Composite-selectall">Composite-selectall</option>
+  														<option value="number">Number</option>
+  														<option value="textarea">Textarea</option>
+  														<option value="text">Text</option>
+  														<option value="singleselect">Single select</option>
+  														<option value="multipleselect">Multi select</option>
+  														<!-- <option value="suggestion">Suggestion</option>
+  														<option value="checkbox">Checkbox</option>
+  														<option value="radio">Radio</option>
+  														<option value="combobox">ComboBox</option>
+  														<option value="list">List</option> -->
+  														<option value="Enum">Enum</option>
+  														<option value="none">None</option>
+													</select> <br />
+							<!-- <input data-ng-model="mytree.currentNode.datatype" /><br />-->
+							<div data-ng-show="mytree.currentNode.datatype == 'Enum'">
+								<label>Add Items</label> <tags-input data-ng-model="mytree.currentNode.listItems" style="width:50%"></tags-input><br />
+							</div>
+							<div data-ng-show="mytree.currentNode.datatype == 'number'">
+								<label>Default</label> <input data-ng-model="mytree.currentNode.val" /><br />
+								<label>IsFloat</label> <input data-ng-model="mytree.currentNode.isFloat" /><br />
+								<label>Lower Range</label> <input data-ng-model="mytree.currentNode.lowerbound" /><br />
+								<label>Upper Range</label> <input data-ng-model="mytree.currentNode.upperbound" /><br />
+							</div>
+							<div ng-if="mytree.currentNode.datatype=='text'">
+								<label>Min Length</label> <input data-ng-model="mytree.currentNode.minLength" /><br />
+							    <label>Max Length</label> <input data-ng-model="mytree.currentNode.maxLength" /><br />
+							</div>
+							<div ng-if="mytree.currentNode.datatype=='textarea'">
+								<label>Character Length</label> <input data-ng-model="mytree.currentNode.characterLength" /><br />
+							</div>
+							<div ng-if="mytree.currentNode.datatype=='singleselect' || mytree.currentNode.datatype=='multipleselect'">
+								<label>Enable Clear List</label> <input type="checkbox"  ng-model="mytree.currentNode.clearList"/><br />
+							</div>
+							<label>Label</label> <input data-ng-model="mytree.currentNode.label" /><br />
+							<label>Id</label> <input data-ng-model="mytree.currentNode.id" /><br />
+							<label>Disable Control</label> <input data-ng-model="mytree.currentNode.disable" type="checkbox"/><br />
+							<label>Required field</label> <input data-ng-model="mytree.currentNode.required" type="checkbox"/><br />
+							<label>Description</label><textarea data-ng-model="mytree.currentNode.description"  cols="18" rows="1"></textarea><br />
+							<div ng-if="mytree.currentNode.datatype=='radio' || mytree.currentNode.datatype=='checkbox'">
+								<label>Should be checked ?</label> <input type="checkbox"  ng-model="mytree.currentNode.checked"/><br />
+							</div>
+							<div ng-if="mytree.currentNode.datatype=='list'">
+								<label>Add List Items</label><tags-input ng-model="mytree.currentNode.listItems" placeholder="Add Items"></tags-input>
+							</div>
+							<button class="done_button btn btn-primary btn-sm" data-ng-click="done()" ng-disabled="!mytree.currentNode.id || !mytree.currentNode.label">DONE</button>
+							<button class="done_button btn btn-primary btn-sm" data-ng-click="SaveAsNode('edit')" ng-if="mode =='editNode'" ng-disabled="!mytree.currentNode.id || !mytree.currentNode.label">SAVE AS NODE</button>
+						</div>
+
+						<div class="input_panel text-left" data-ng-show="mode == 'addChild'">
+						  <h4>New Node</h4>
+							<input type="checkbox" data-ng-model="temporaryNode.isControl"> Is Control<br>
+							<label>Datatype</label> <select data-ng-model="temporaryNode.datatype" ng-change="DisableAddChild('new')">
+  														<option value="Composite-selectsingle">Composite-selectsingle</option>
+  														<option value="Composite-selectall">Composite-selectall</option>
+  														<option value="number">Number</option>
+  														<option value="textarea">Textarea</option>
+  														<option value="text">Text</option>
+  														<option value="singleselect">Single select</option>
+  														<option value="multipleselect">Multi select</option>
+  														<!-- <option value="suggestion">Suggestion</option>
+  														<option value="checkbox">Checkbox</option>
+  														<option value="radio">Radio</option>
+  														<option value="combobox">ComboBox</option>
+  														<option value="list">List</option> -->
+  														<option value="Enum">Enum</option>
+  														<option value="none">None</option>
+													</select> <br />
+							<div data-ng-show="temporaryNode.datatype == 'Enum'">
+								<label>Add Items</label> <span><tags-input data-ng-model="temporaryNode.listItems" style="width:50%"></tags-input></span><br />
+							</div>
+							<div data-ng-show="temporaryNode.datatype == 'number'">
+								<label>Default</label> <input data-ng-model="temporaryNode.val" /><br />
+								<label>IsFloat</label> <input data-ng-model="temporaryNode.isFloat" /><br />
+								<label>Lower Range</label> <input data-ng-model="temporaryNode.lowerbound" /><br />
+								<label>Upper Range</label> <input data-ng-model="temporaryNode.upperbound" /><br />
+							</div>
+							<div ng-if="temporaryNode.datatype=='text'">
+								<label>Min Length</label> <input data-ng-model="temporaryNode.minLength" /><br />
+							    <label>Max Length</label> <input data-ng-model="temporaryNode.maxLength" /><br />
+							</div>
+							<div ng-if="temporaryNode.datatype=='textarea'">
+								<label>Character Length</label> <input data-ng-model="temporaryNode.characterLength" /><br />
+							</div>
+							<div ng-if="temporaryNode.datatype=='singleselect' || temporaryNode.datatype=='multipleselect'">
+								<label>Enable Clear List</label><input type="checkbox" ng-model="temporaryNode.clearList"/><br />
+							</div>
+							<label>Label</label> <input data-ng-model="temporaryNode.label" /><br />
+							<label>Id</label> <input data-ng-model="temporaryNode.id" /><br />
+							<label>Disable Control</label> <input data-ng-model="temporaryNode.disable" type="checkbox"/><br />
+							<label>Required field</label> <input data-ng-model="temporaryNode.required" type="checkbox"/><br />
+							<label>Description</label> <textarea  cols="18" rows="1" data-ng-model="temporaryNode.description" ></textarea><br />
+							<div ng-if="temporaryNode.datatype=='radio' || temporaryNode.datatype=='checkbox'">
+								<label>Should be checked ?</label> <input type="checkbox"  ng-model="temporaryNode.checked"/><br />
+							</div>
+							<div ng-if="temporaryNode.datatype=='list'">
+								<label>Add List Items</label><tags-input ng-model="temporaryNode.listItems"  placeholder="Add Items"></tags-input>
+							</div>
+							<button class="done_button btn btn-primary btn-sm" data-ng-click="addChildDone()" ng-disabled="!temporaryNode.id || !temporaryNode.label">DONE</button>
+							<button class="done_button btn btn-primary btn-sm" data-ng-click="SaveAsNode('new')" ng-if="mode =='addChild'" ng-disabled="!temporaryNode.id || !temporaryNode.label">SAVE AS NODE</button>
+					</div>
+					</div>
+				</div>
+				<div class="row col-sm-12">
+					<button data-ng-click="saveDesignOfForm()"  class="btn btn-primary" >Save</button>
+					<div class="FullWidth">
+					  <div>
+						<pre>stdFormData: {{mytree | pretty}}</pre>
+					  </div>
+				   </div>
+				</div>
+</div>

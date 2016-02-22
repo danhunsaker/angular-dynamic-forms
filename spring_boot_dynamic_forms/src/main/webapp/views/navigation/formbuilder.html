@@ -1,0 +1,46 @@
+    <div class="container FullWidth" ng-controller="masterDataCtrl">  
+      <div class="row">
+  			<my-header-bar selected='plan'></my-header-bar>
+  	  </div>
+
+  	  <div class="help-block alert alert-success" ng-show="isDataSaved" id="divSuccess">
+  	  		<a href="#" class="close" data-dismiss="alert">&times;</a>
+			<strong>Success!&nbsp;</strong>{{successMsg}}
+	  </div>
+	  <div class="alert alert-danger" ng-show="isError" id="divError">
+  	  		<a href="#" class="close" data-dismiss="alert">&times;</a>
+			<strong>Error!&nbsp;</strong>{{errorMsg}} 
+	  </div>
+  	  <div class="row col-md-12">
+		  <div class="col-md-3">
+	        <table class="table table-hover table-striped table-condensed">
+	            <thead>
+	                <th></th>
+	                <th></th>
+	                <th></th>
+	                <th></th>
+	            </thead>
+	            <tbody>
+	                <tr>
+						<td>Design Of Forms: </td>
+						<td><a ui-sref="formbuilder.listDesignOfForms( )">List</a></td> 
+						<td>|</td> 
+						<td><a ui-sref="formbuilder.renderDesignOfForms( { dataid: '0' })">Create</a></td>					
+	                </tr>
+	                <tr ng-repeat="menuEntry in menuEntries | filter:query">
+						<td>{{menuEntry}}: </td>
+						<td><a ui-sref="formbuilder.listFormData( {formid: '{{menuEntry}}' } )">List</a></td> 
+						<td>|</td> 
+						<td><a ui-sref="formbuilder.renderFormData( {formid: '{{menuEntry}}', dataid: '0' })">Create</a></td>					
+					</tr>
+	            </tbody>
+	        </table>
+		  </div>
+		  <div class="col-md-9">
+				<div ui-view></div>
+		  </div>
+		  <div class="col-md-3">
+		  </div>
+      </div>   
+	</div>
+

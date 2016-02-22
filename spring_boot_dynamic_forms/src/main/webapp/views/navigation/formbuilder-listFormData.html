@@ -1,0 +1,36 @@
+<div ng-controller="listFormDataCtrl">
+<legend class="noBold fontLegend col-md-12">List Forms</legend>
+    <div class="row col-md-9">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <form class="form-horizontal noBorder" role="form">
+                    <div class="form-group">
+                        <label for="messageFilter" class="col-sm-2 control-label">Filter:</label>
+                        <div class="col-sm-4">
+                              <input type="text" class="form-control" id="messageFilter" placeholder="Filter Forms..." ng-model="query">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="row col-md-9">
+        <table class="table table-hover table-striped table-condensed">
+            <thead>
+                <th>Name</th>
+                 <th></th>
+            </thead>
+            <tbody>
+                <tr ng-repeat="message in messages | filter:query">
+                    <td><a ui-sref="formbuilder.renderFormData( {formid: '{{formid}}', dataid: '{{message.id}}' } )">{{message.rootnode.id}}</a></td>
+                    <td class="text-center">
+                        <a href=""><span class="glyphicon glyphicon-remove" ng-click="deleteAttribute(message.id)" style="color:red"></span></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+	
+</div>

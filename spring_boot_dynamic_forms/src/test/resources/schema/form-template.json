@@ -1,0 +1,46 @@
+{
+    "id" : "5647921c8370203770eb2e8c",
+    "rootnode" : {
+        "children" : [ 
+            {
+                "datatype" : "text",
+                "listItems" : [],
+                "clearList" : "",
+                "checked" : "",
+                "minLength" : "20",
+                "maxLength" : "30",
+                "label" : "Manjula's Entry",
+                "id" : "text"
+            },
+		{
+		"datatype": "Composite-selectsingle",
+		"listItems": [],
+		"checked": "",
+		"label": "MCom",
+		"id": "mcom",
+		"children": [
+		  {
+		    "datatype": "number",
+		    "listItems": [],
+		    "clearList": "",
+		    "checked": "",
+		    "default": "5",
+		    "isFloat": "true",
+		    "lowerbound": "10",
+		    "upperbound": "100",
+		    "label": "MText",
+		    "id": "mtext"
+		  }
+		],
+		"clearList": ""
+		}
+        ],
+        "datatype" : "Composite-selectsingle",
+        "id" : "fuelload",
+        "label" : "Fuel Load",
+        "clearList" : "",
+        "listItems" : [],
+        "selected" : "selected",
+        "checked" : ""
+    }
+}

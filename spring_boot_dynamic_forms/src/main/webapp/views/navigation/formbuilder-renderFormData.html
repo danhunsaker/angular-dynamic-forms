@@ -1,0 +1,12 @@
+<div class="container" ng-controller="renderFormDataCtrl">
+<div class="row">
+	<dynamic-form class="col-md-9" template-url="./getFormData/{{formid}}/{{dataid}}" ng-submit="processForm()" ng-model="urlFormData">
+	<!--<dynamic-form class="col-md-9" template-url="./form-template.json" ng-submit="processForm()" ng-model="urlFormData">-->
+	</dynamic-form>
+</div>
+<div class="row">
+       <div class="col-md-9" style="padding-left:0px">
+        <pre>Json : {{urlFormData | pretty}}</pre>
+      </div>
+</div>  
+</div>

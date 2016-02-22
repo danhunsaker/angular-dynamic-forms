@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html ng-app="appDynApp" ng-controller="mainCtrl">
+<head lang="en">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no">
+<title>Ui Forms</title>
+<link rel="stylesheet" href="libraries/bootstrap/css/bootstrap.css" />
+<link rel="stylesheet"
+	href="libraries/bootstrap/css/bootstrap-theme.css" />
+<link rel="stylesheet" href="libraries/ngtags/ng-tags-input.min.css">
+<link rel="stylesheet" href="assets/css/main.css" />
+<link rel="stylesheet" type="text/css" href="assets/css//ng-grid.css" />
+<link rel="stylesheet" type="text/css" href="assets/css/json-formatter.min.css" />
+<style>
+</style>
+
+<script src="libraries/jquery/js/jquery-2.1.1.js"></script>
+<script src="libraries/angular/js/angular.js"></script>
+<script src="libraries/angular/js/angular-ui-router.min.js"></script>
+<script src="libraries/angular/js/angular-sanitize.js"></script>
+<script src="libraries/angular/js/angular.treeview.js"></script>
+<script src="libraries/angular/js/ng-grid.debug.js"></script>
+<!--script src="libraries/angular/js/angular-mocks.js"></script>
+<script src="libraries/angular/js/angular-scenario.js"></script-->
+<script src="libraries/angular/js/ui-bootstrap-0.11.0.js"></script>
+<script src="libraries/angular/js/ui-bootstrap-tpls-0.11.0.js"></script>
+<script src="libraries/bootstrap/js/bootstrap.js"></script>
+<script type="text/javascript" src="libraries/ngtags/ng-tags-input.js"></script>
+<script type="text/javascript" src="libraries/angular/js/dynamic-forms.js"></script>
+
+<script src="app.js"></script>
+
+<!--./   Controller -->
+<script src="controllers/masterData.controllers.js"></script>
+<script src="controllers/mainCtrl.controllers.js"></script>
+<script src="controllers/formdatalist.controllers.js"></script>
+<script src="controllers/formdatarender.controllers.js"></script>
+<script src="controllers/designofformscreate.controllers.js"></script>
+<script src="controllers/designofformslist.controllers.js"></script>
+
+<!--./   Directive -->
+<script src="directives/headerbar.directive.js"></script>
+
+<style>
+/* angular.treeview */
+div[data-angular-treeview] {
+	/* prevent user selection */
+	-moz-user-select: -moz-none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	/* default */
+	font-family: Tahoma;
+	font-size: 13px;
+	color: #555;
+	text-decoration: none;
+}
+
+div[data-tree-model] ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	border: none;
+	overflow: hidden;
+}
+
+div[data-tree-model] li {
+	position: relative;
+	padding: 0 0 0 20px;
+	line-height: 20px;
+}
+
+div[data-tree-model] li .expanded {
+	padding: 1px 10px;
+	background-image:
+		url("assets/img/folder.png");
+	background-repeat: no-repeat;
+}
+
+div[data-tree-model] li .collapsed {
+	padding: 1px 10px;
+	background-image:
+		url("assets/img/folder-closed.png");
+	background-repeat: no-repeat;
+}
+
+div[data-tree-model] li .normal {
+	padding: 1px 10px;
+	background-image:
+		url("assets/img/file.png");
+	background-repeat: no-repeat;
+}
+
+div[data-tree-model] li i,div[data-tree-model] li span {
+	cursor: pointer;
+}
+
+div[data-tree-model] li .selected {
+	/* background-color: #aaddff; */
+	font-weight: bold;
+	padding: 1px 5px;
+}
+
+/* example */
+label {
+	display: inline-block;
+	width: 30px;
+	padding: 0 10px;
+	font-weight: bold;
+}
+
+.button_panel {
+	margin: 10px 0 30px 0;
+	padding: 10px;
+	background-color: #EEEEEE;
+	border-radius: 5px;
+	font: 12px Tahoma;
+}
+
+.input_panel {
+	padding: 10px 5px;
+}
+
+.done_button {
+	margin-top: 10px;
+}
+
+.ui-view {
+	position: relative;
+	height: auto;
+	width: auto;
+}
+
+
+/*************** for dynamic-forms.js **************/
+      .nav,
+      .pagination,
+      .carousel a {
+        cursor: pointer;
+      }
+
+      .fixed {
+        position: fixed;
+        margin: 0;
+      }
+
+      [ng-cloak] {
+        display: none;
+      }
+
+      div.fixed {
+        overflow-y: auto;
+        height: 100%;
+        margin-left: -15px;
+      }
+
+      pre {
+        margin: 1ex 0;
+      }
+
+      form,
+      ng-form {
+        border: 1px solid blue;
+        border-radius: 4px;
+        display: block;
+      }
+
+      fieldset {
+        border: 1px solid blue;
+        border-radius: 4px;
+        display: block;
+        padding: .35em .625em .75em;
+        margin: 0 2px;
+      }
+
+      legend {
+        font-weight: bold;
+      }
+
+      fieldset > legend:first-of-type {
+        border: none;
+        margin-bottom: auto;
+        width: inherit;
+        padding: inherit;
+        color: blue;
+      }
+
+      label,
+      span,
+      form > button,
+      ng-form > button,
+      form > input,
+      ng-form > input {
+        width: 48%;
+        padding: 1ex 1em;
+      }
+
+      label > input,
+      label > select,
+      label > textarea {
+        float: right;
+        width: 60%;
+      }
+
+      label div > label {
+        display: block;
+        padding: 1ex;
+        width: 100%;
+      }
+/******* Grid *******/
+
+.gridStyle {
+border: 1px solid rgb(212,212,212);
+width: 400px;
+height: 300px
+}
+</style>
+
+</head>
+
+<body>
+
+	<div class="container FullWidth">
+		<div ui-view></div>
+	</div>
+
+</body>
+</html>
