@@ -18,37 +18,37 @@ angular.module('dynform', [])
   .directive('dynamicForm', ['$q', '$parse', '$http', '$templateCache', '$compile', '$document', '$timeout', function ($q, $parse, $http, $templateCache, $compile, $document, $timeout) {
     var supported = {
         //  Text-based elements
-        'text': {element: 'input', type: 'text', editable: true, textBased: true},
-        'date': {element: 'input', type: 'date', editable: true, textBased: true},
-        'datetime': {element: 'input', type: 'datetime', editable: true, textBased: true},
-        'datetime-local': {element: 'input', type: 'datetime-local', editable: true, textBased: true},
-        'email': {element: 'input', type: 'email', editable: true, textBased: true},
-        'month': {element: 'input', type: 'month', editable: true, textBased: true},
-        'number': {element: 'input', type: 'number', editable: true, textBased: true},
-        'password': {element: 'input', type: 'password', editable: true, textBased: true},
-        'search': {element: 'input', type: 'search', editable: true, textBased: true},
-        'tel': {element: 'input', type: 'tel', editable: true, textBased: true},
-        'textarea': {element: 'textarea', editable: true, textBased: true},
-        'time': {element: 'input', type: 'time', editable: true, textBased: true},
-        'url': {element: 'input', type: 'url', editable: true, textBased: true},
-        'week': {element: 'input', type: 'week', editable: true, textBased: true},
+        'text': {element: 'input', type: 'text', editable: true, textBased: true, class: ''},
+        'date': {element: 'input', type: 'date', editable: true, textBased: true, class: ''},
+        'datetime': {element: 'input', type: 'datetime', editable: true, textBased: true, class: ''},
+        'datetime-local': {element: 'input', type: 'datetime-local', editable: true, textBased: true, class: ''},
+        'email': {element: 'input', type: 'email', editable: true, textBased: true, class: ''},
+        'month': {element: 'input', type: 'month', editable: true, textBased: true, class: ''},
+        'number': {element: 'input', type: 'number', editable: true, textBased: true, class: ''},
+        'password': {element: 'input', type: 'password', editable: true, textBased: true, class: ''},
+        'search': {element: 'input', type: 'search', editable: true, textBased: true, class: ''},
+        'tel': {element: 'input', type: 'tel', editable: true, textBased: true, class: ''},
+        'textarea': {element: 'textarea', editable: true, textBased: true, class: ''},
+        'time': {element: 'input', type: 'time', editable: true, textBased: true, class: ''},
+        'url': {element: 'input', type: 'url', editable: true, textBased: true, class: ''},
+        'week': {element: 'input', type: 'week', editable: true, textBased: true, class: ''},
         //  Specialized editables
-        'checkbox': {element: 'input', type: 'checkbox', editable: true, textBased: false},
-        'color': {element: 'input', type: 'color', editable: true, textBased: false},
-        'file': {element: 'input', type: 'file', editable: true, textBased: false},
-        'range': {element: 'input', type: 'range', editable: true, textBased: false},
-        'select': {element: 'select', editable: true, textBased: false},
+        'checkbox': {element: 'input', type: 'checkbox', editable: true, textBased: false, class: ''},
+        'color': {element: 'input', type: 'color', editable: true, textBased: false, class: ''},
+        'file': {element: 'input', type: 'file', editable: true, textBased: false, class: ''},
+        'range': {element: 'input', type: 'range', editable: true, textBased: false, class: ''},
+        'select': {element: 'select', editable: true, textBased: false, class: ''},
         //  Pseudo-non-editables (containers)
-        'checklist': {element: 'div', editable: false, textBased: false},
-        'fieldset': {element: 'fieldset', editable: false, textBased: false},
-        'radio': {element: 'div', editable: false, textBased: false},
+        'checklist': {element: 'div', editable: false, textBased: false, class: ''},
+        'fieldset': {element: 'fieldset', editable: false, textBased: false, class: ''},
+        'radio': {element: 'div', editable: false, textBased: false, class: ''},
         //  Non-editables (mostly buttons)
-        'button': {element: 'button', type: 'button', editable: false, textBased: false},
-        'hidden': {element: 'input', type: 'hidden', editable: false, textBased: false},
-        'image': {element: 'input', type: 'image', editable: false, textBased: false},
-        'legend': {element: 'legend', editable: false, textBased: false},
-        'reset': {element: 'button', type: 'reset', editable: false, textBased: false},
-        'submit': {element: 'button', type: 'submit', editable: false, textBased: false}
+        'button': {element: 'button', type: 'button', editable: false, textBased: false, class: ''},
+        'hidden': {element: 'input', type: 'hidden', editable: false, textBased: false, class: ''},
+        'image': {element: 'input', type: 'image', editable: false, textBased: false, class: ''},
+        'legend': {element: 'legend', editable: false, textBased: false, class: ''},
+        'reset': {element: 'button', type: 'reset', editable: false, textBased: false, class: ''},
+        'submit': {element: 'button', type: 'submit', editable: false, textBased: false, class: ''}
       };
     
     return {
@@ -97,6 +97,7 @@ angular.module('dynform', [])
                 //  Unsupported.  Create SPAN with field.label as contents
                 newElement = angular.element('<span></span>');
                 if (angular.isDefined(field.label)) {angular.element(newElement).html(field.label);}
+                if (angular.isDefined(supported[field.type].class)) {newElement.attr('class', supported[field.type].class);}
                 angular.forEach(field, function (val, attr) {
                   if (["label", "type"].indexOf(attr) > -1) {return;}
                   newElement.attr(attr, val);
@@ -124,6 +125,7 @@ angular.module('dynform', [])
                     
                   if (angular.isDefined(field.readonly)) {newElement.attr('ng-readonly', field.readonly);}
                   if (angular.isDefined(field.required)) {newElement.attr('ng-required', field.required);}
+                  if (angular.isDefined(supported[field.type].class)) {newElement.attr('class', supported[field.type].class);}
                   if (angular.isDefined(field.val)) {
                     setProperty(model, field.model, angular.copy(field.val));
                     newElement.attr('value', field.val);
@@ -136,6 +138,7 @@ angular.module('dynform', [])
                   if (angular.isDefined(field.maxLength)) {newElement.attr('ng-maxlength', field.maxLength);}
                   if (angular.isDefined(field.validate)) {newElement.attr('ng-pattern', field.validate);}
                   if (angular.isDefined(field.placeholder)) {newElement.attr('placeholder', field.placeholder);}
+                  if (angular.isDefined(supported[field.type].class)) {newElement.attr('class', supported[field.type].class);}
                 }
                 
                 //  Special cases
@@ -143,14 +146,17 @@ angular.module('dynform', [])
                   if (angular.isDefined(field.minValue)) {newElement.attr('min', field.minValue);}
                   if (angular.isDefined(field.maxValue)) {newElement.attr('max', field.maxValue);}
                   if (angular.isDefined(field.step)) {newElement.attr('step', field.step);}
+                  if (angular.isDefined(supported[field.type].class)) {newElement.attr('class', supported[field.type].class);}
                 }
                 else if (['text', 'textarea'].indexOf(field.type) > -1) {
                   if (angular.isDefined(field.splitBy)) {newElement.attr('ng-list', field.splitBy);}
+                  if (angular.isDefined(supported[field.type].class)) {newElement.attr('class', supported[field.type].class);}
                 }
                 else if (field.type === 'checkbox') {
                   if (angular.isDefined(field.isOn)) {newElement.attr('ng-true-value', field.isOn);}
                   if (angular.isDefined(field.isOff)) {newElement.attr('ng-false-value', field.isOff);}
                   if (angular.isDefined(field.slaveTo)) {newElement.attr('ng-checked', field.slaveTo);}
+                  if (angular.isDefined(supported[field.type].class)) {newElement.attr('class', supported[field.type].class);}
                 }
                 else if (field.type === 'checklist') {
                   if (angular.isDefined(field.val)) {
@@ -199,6 +205,7 @@ angular.module('dynform', [])
                       if (angular.isDefined(field.callback)) {newChild.attr('ng-change', field.callback);}
                       if (angular.isDefined(field.readonly)) {newChild.attr('ng-readonly', field.readonly);}
                       if (angular.isDefined(field.required)) {newChild.attr('ng-required', field.required);}
+                      if (angular.isDefined(supported[field.type].class)) {newElement.attr('class', supported[field.type].class);}
                       newChild.attr('value', val);
                       if (angular.isDefined(field.val) && field.val === val) {newChild.attr('checked', 'checked');}
                       
@@ -213,7 +220,8 @@ angular.module('dynform', [])
                 else if (field.type === 'select') {
                   if (angular.isDefined(field.multiple) && field.multiple !== false) {newElement.attr('multiple', 'multiple');}
                   if (angular.isDefined(field.empty) && field.empty !== false) {newElement.append(angular.element($document[0].createElement('option')).attr('value', '').html(field.empty));}
-                  
+                  if (angular.isDefined(supported[field.type].class)) {newElement.attr('class', supported[field.type].class);}
+
                   if (angular.isDefined(field.autoOptions)) {
                     newElement.attr('ng-options', field.autoOptions);
                   }
@@ -247,10 +255,13 @@ angular.module('dynform', [])
                 else if (field.type === 'image') {
                   if (angular.isDefined(field.label)) {newElement.attr('alt', field.label);}
                   if (angular.isDefined(field.source)) {newElement.attr('src', field.source);}
+                  if (angular.isDefined(supported[field.type].class)) {newElement.attr('class', supported[field.type].class);}
                 }
                 else if (field.type === 'hidden') {
                   newElement.attr('name', bracket(field.model));
                   newElement.attr('ng-model', bracket(field.model, attrs.ngModel));
+                  if (angular.isDefined(supported[field.type].class)) {newElement.attr('class', supported[field.type].class);}
+
                   if (angular.isDefined(field.val)) {
                     setProperty(model, field.model, angular.copy(field.val));
                     newElement.attr('value', field.val);
@@ -260,6 +271,7 @@ angular.module('dynform', [])
                   if (angular.isDefined(field.multiple)) {
                     newElement.attr('multiple', field.multiple);
                   }
+                  if (angular.isDefined(supported[field.type].class)) {newElement.attr('class', supported[field.type].class);}
                 }
                 else if (field.type === 'fieldset') {
                   if (angular.isDefined(field.fields)) {
@@ -267,11 +279,13 @@ angular.module('dynform', [])
                     angular.forEach(field.fields, buildFields, newElement);
                     newElement = workingElement;
                   }
+                  if (angular.isDefined(supported[field.type].class)) {newElement.attr('class', supported[field.type].class);}
                 }
                 
                 //  Common attributes; radio already applied these...
                 if (field.type !== "radio") {
                   if (angular.isDefined(field['class'])) {newElement.attr('ng-class', field['class']);}
+                  if (angular.isDefined(supported[field.type].class)) {newElement.attr('class', supported[field.type].class);}
                   //  ...and checklist has already applied these.
                   if (field.type !== "checklist") {
                     if (angular.isDefined(field.disabled)) {newElement.attr('ng-disabled', field.disabled);}
@@ -302,6 +316,7 @@ angular.module('dynform', [])
                   //  Button elements get their labels from their contents.
                   else if (["button", "legend", "reset", "submit"].indexOf(field.type) > -1) {
                     newElement.html(field.label);
+                    if (angular.isDefined(supported[field.type].class)) {newElement.attr('class', supported[field.type].class);}
                   }
                   //  Everything else should be wrapped in a label tag.
                   else {
