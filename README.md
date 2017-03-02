@@ -32,6 +32,9 @@ in bower, and the bower name will not change.  It is strongly recommended to use
 so you can get the latest version of this project at any given time, regardless of whether I've
 gotten around to renaming the repo.
 
+### Demo ###
+http://embed.plnkr.co/9AB8zISMJHGqYmfLiwss/preview
+
 Use
 ---
 As with any other [AngularJS][] module:
